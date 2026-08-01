@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
         const body = await request.text()
         const headersList = await headers()
         const sig = headersList.get('stripe-signature')!
-
+        console.log('')
         let event: Stripe.Event
 
         try {
