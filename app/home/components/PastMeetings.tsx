@@ -53,10 +53,10 @@ function PastMeetings({
 
     if (pastMeetings.length === 0) {
         return (
-            <div className='bg-card rounded-lg p-8 text-center border border-border'>
+            <div className='bg-card rounded-2xl p-10 text-center border border-border shadow-sm'>
                 <Video className='h-12 w-12 mx-auto text-muted-foreground mb-4' />
-                <h3 className='text-lg font-medium mb-2 text-foreground'>No past meetings</h3>
-                <p className='text-muted-foreground'>Your completed meetings will appear here</p>
+                <h3 className='text-lg font-semibold mb-2 text-foreground'>No past meetings</h3>
+                <p className='text-muted-foreground text-sm'>Your completed meetings will appear here</p>
             </div>
         )
     }
@@ -66,7 +66,7 @@ function PastMeetings({
             {pastMeetings.map((meeting) => (
                 <div
                     key={meeting.id}
-                    className='bg-card rounded-lg p-4 border border-border hover:shadow-md transition-shadow cursor-pointer'
+                    className='bg-card rounded-2xl p-5 border border-border shadow-sm hover:border-[#5B5CEB]/30 hover:shadow-md transition-all duration-200 cursor-pointer'
                     onClick={() => onMeetingClick(meeting.id)}
                 >
                     <div className='flex justify-between items-start mb-3'>
@@ -82,17 +82,17 @@ function PastMeetings({
                                 />
                             )}
                         </div>
-                        <span className='text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full'>
+                        <span className='text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded-full font-medium'>
                             Completed
                         </span>
                     </div>
                     {meeting.description && (
-                        <p className='text-sm text-muted-foreground mb-3'>{meeting.description}</p>
+                        <p className='text-sm text-muted-foreground mb-3 leading-relaxed'>{meeting.description}</p>
                     )}
 
                     <div className='text-sm text-muted-foreground mb-3'>
                         <div className='flex items-center gap-2'>
-                            <Clock className='h-4 w-4' />
+                            <Clock className='h-4 w-4 text-[#5B5CEB]' />
                             <span>
                                 {format(new Date(meeting.startTime), 'PPp')} - {format(new Date(meeting.endTime), 'pp')}
                             </span>
@@ -104,10 +104,10 @@ function PastMeetings({
                         onClick={(e) => e.stopPropagation()}
                     >
                         <Button
-                            className='flex items-center gap-1 px-3 py-1 bg-primary text-primary-foreground text-xs rounded hover:bg-primary/90 transition-colors h-6 cursor-pointer'
+                            className='flex items-center gap-1.5 px-3.5 py-1.5 bg-[#5B5CEB] hover:bg-[#4F46E5] text-white text-xs font-semibold rounded-xl shadow-xs transition-colors h-8 cursor-pointer'
                             onClick={() => onMeetingClick(meeting.id)}
                         >
-                            <ExternalLink className='h-3 w-3' />
+                            <ExternalLink className='h-3.5 w-3.5' />
                             View Details
                         </Button>
 

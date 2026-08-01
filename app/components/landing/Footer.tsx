@@ -1,21 +1,36 @@
-import { Bot } from 'lucide-react'
+'use client'
+
 import React from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
 
 function Footer() {
     return (
-        <footer className='border-t border-border py-5 bg-background text-foreground'>
+        <footer className='border-t border-border py-6 bg-background text-foreground'>
             <div className='max-w-6xl mx-auto px-4'>
-                <div className='flex flex-col md:flex-row justify-between items-center'>
-                    <div className='flex items-center space-x-2 mb-4 md:mb-0'>
-                        <div className='w-8 h-8 bg-muted rounded-lg flex items-center justify-center'>
-                            <Bot className='w-5 h-5 text-foreground' />
-                        </div>
-                        <span className='text-xl font-bold text-foreground'>MeetingBot</span>
+                <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4 }}
+                    className='flex flex-col md:flex-row justify-between items-center'
+                >
+                    <Link href="/" className="flex items-center gap-2 mb-4 md:mb-0 group">
+                        <Image
+                            src="/meetMatee.png"
+                            alt="MeetMatee Logo"
+                            width={200}
+                            height={40}
+                            priority
+                            unoptimized
+                            className="h-9 w-auto object-contain transition-transform group-hover:scale-105"
+                        />
+                    </Link>
+                    <div className='text-muted-foreground text-sm font-medium'>
+                        &copy; {new Date().getFullYear()} MeetMatee. Made with ❤️ for better meetings.
                     </div>
-                    <div className='text-muted-foreground text-sm'>
-                        &copy; {new Date().getFullYear()} MeetingBot. Made with ❤️ for better meetings.
-                    </div>
-                </div>
+                </motion.div>
             </div>
         </footer>
     )

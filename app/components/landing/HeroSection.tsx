@@ -9,6 +9,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
+import { fadeUp, staggerContainer, staggerItem } from "@/lib/design-system/animations"
 
 export default function HeroSection() {
     const { isSignedIn } = useUser()
@@ -53,7 +55,7 @@ export default function HeroSection() {
                             )}
 
                             {isSignedIn ? (
-                                <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white">
+                                <Button asChild className="bg-[#5B5CEB] hover:bg-[#4F46E5] text-white shadow-md">
                                     <Link href="/home">Dashboard</Link>
                                 </Button>
                             ) : (
@@ -65,7 +67,7 @@ export default function HeroSection() {
                                     </SignInButton>
 
                                     <SignUpButton mode="modal">
-                                        <Button className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
+                                        <Button className="bg-[#5B5CEB] hover:bg-[#4F46E5] text-white shadow-md cursor-pointer">
                                             Get Started
                                         </Button>
                                     </SignUpButton>
@@ -76,12 +78,18 @@ export default function HeroSection() {
                 </div>
             </nav>
 
-            <section className="py-20 px-4 bg-background text-foreground">
-                <div className="max-w-4xl mx-auto text-center">
-                    <div className="group relative mx-auto flex w-fit items-center justify-center rounded-full px-4 py-1.5 shadow-[inset_0_-8px_10px_#3b82f61f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#3b82f63f] mb-8">
+            <section className="py-20 px-4 bg-background text-foreground relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(91,92,235,0.15),rgba(255,255,255,0))]" />
+                <motion.div
+                    variants={staggerContainer}
+                    initial="initial"
+                    animate="animate"
+                    className="max-w-4xl mx-auto text-center relative z-10"
+                >
+                    <motion.div variants={staggerItem} className="group relative mx-auto flex w-fit items-center justify-center rounded-full px-4 py-1.5 shadow-[inset_0_-8px_10px_#5b5ceb1f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#5b5ceb3f] mb-8">
                         <span
                             className={cn(
-                                "absolute inset-0 block h-full w-full animate-gradient rounded-[inherit] bg-gradient-to-r from-[#3b82f6]/50 via-[#1d4ed8]/50 to-[#3b82f6]/50 bg-[length:300%_100%] p-[1px]",
+                                "absolute inset-0 block h-full w-full animate-gradient rounded-[inherit] bg-gradient-to-r from-[#5B5CEB]/50 via-[#4F46E5]/50 to-[#5B5CEB]/50 bg-[length:300%_100%] p-[1px]",
                             )}
                             style={{
                                 WebkitMask:
@@ -92,7 +100,7 @@ export default function HeroSection() {
                                 WebkitClipPath: "padding-box",
                             }}
                         />
-                        <Sparkles className="w-4 h-4 mr-2 text-blue-500" />
+                        <Sparkles className="w-4 h-4 mr-2 text-[#5B5CEB]" />
                         <hr className="mx-2 h-4 w-px shrink-0 bg-neutral-500" />
                         <AnimatedGradientText className="text-sm font-medium text-foreground/80">
                             AI-Powered Meeting Assistant
@@ -100,18 +108,18 @@ export default function HeroSection() {
                         <ChevronRight
                             className="ml-1 w-4 h-4 stroke-neutral-500 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5"
                         />
-                    </div>
-                    <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+                    </motion.div>
+                    <motion.h1 variants={staggerItem} className="text-4xl md:text-6xl font-bold text-foreground mb-6 tracking-tight">
                         Transform Your Meetings with{' '}
-                        <span className="bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 bg-clip-text text-transparent">AI Magic</span>
-                    </h1>
-                    <p className="text-lg max-w-2xl mx-auto mb-8 text-muted-foreground">
+                        <span className="bg-gradient-to-r from-[#5B5CEB] via-[#6366F1] to-[#3B82F6] bg-clip-text text-transparent">AI Magic</span>
+                    </motion.h1>
+                    <motion.p variants={staggerItem} className="text-lg max-w-2xl mx-auto mb-8 text-muted-foreground leading-relaxed">
                         Automatic summaries, action items, and intelligent insights for every meeting.
                         Never miss important details again.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                    </motion.p>
+                    <motion.div variants={staggerItem} className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
                         {isSignedIn ? (
-                            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4" >
+                            <Button asChild size="lg" className="bg-[#5B5CEB] hover:bg-[#4F46E5] text-white shadow-md hover:shadow-lg hover:shadow-[#5B5CEB]/25 px-8 py-4" >
                                 <Link href="/home" className="group">
                                     <span>Dashboard</span>
                                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -120,7 +128,7 @@ export default function HeroSection() {
                             </Button>
                         ) : (
                             <SignUpButton mode="modal">
-                                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 group cursor-pointer">
+                                <Button size="lg" className="bg-[#5B5CEB] hover:bg-[#4F46E5] text-white shadow-md hover:shadow-lg hover:shadow-[#5B5CEB]/25 px-8 py-4 group cursor-pointer">
                                     <span>Start Free Trial</span>
                                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                                 </Button>
@@ -131,22 +139,22 @@ export default function HeroSection() {
                             <Play className="w-5 h-5 mr-2" />
                             <span>Watch Demo</span>
                         </Button>
-                    </div>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-muted-foreground">
+                    </motion.div>
+                    <motion.div variants={staggerItem} className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-muted-foreground">
                         <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
+                            <CheckCircle className="w-4 h-4 text-emerald-500" />
                             <span>No credit card required</span>
                         </div>
                         <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
+                            <CheckCircle className="w-4 h-4 text-emerald-500" />
                             <span>Setup in 2 minutes</span>
                         </div>
                         <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
+                            <CheckCircle className="w-4 h-4 text-emerald-500" />
                             <span>Free forever plan</span>
                         </div>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
             </section>
         </>
     )

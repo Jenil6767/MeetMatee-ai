@@ -42,7 +42,7 @@ function UpcomingMeetings({
             )}
 
             {initialLoading ? (
-                <div className='bg-card rounded-lg p-6 border border-border'>
+                <div className='bg-card rounded-2xl p-6 border border-border shadow-sm'>
                     <div className='animate-pulse'>
                         <div className='w-12 h-12 mx-auto bg-muted rounded-full mb-3'></div>
                         <div className='h-4 bg-muted rounded w-3/4 mx-auto mb-2'></div>
@@ -51,25 +51,25 @@ function UpcomingMeetings({
                     </div>
                 </div>
             ) : !connected ? (
-                <div className='bg-card rounded-lg p-6 text-center border border-border'>
-                    <div className='w-12 h-12 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-3'>
+                <div className='bg-card rounded-2xl p-6 text-center border border-border shadow-sm'>
+                    <div className='w-12 h-12 mx-auto bg-[#5B5CEB]/10 text-[#5B5CEB] rounded-2xl flex items-center justify-center mb-3 text-xl'>
                         📆
                     </div>
                     <h3 className='font-semibold mb-2 text-foreground text-sm'>Connect Calendar</h3>
-                    <p className='text-muted-foreground mb-4 text-xs'>
+                    <p className='text-muted-foreground mb-4 text-xs leading-relaxed'>
                         Connect Google Calendar to see upcoming meetings
                     </p>
 
                     <Button
                         onClick={onConnectCalendar}
                         disabled={loading}
-                        className='w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors text-sm cursor-pointer'
+                        className='w-full px-4 py-2.5 bg-[#5B5CEB] hover:bg-[#4F46E5] text-white rounded-xl shadow-sm disabled:opacity-50 transition-all text-sm cursor-pointer'
                     >
                         {loading ? 'Connecting' : 'Connect Google Calendar'}
                     </Button>
                 </div>
             ) : upcomingEvents.length === 0 ? (
-                <div className='bg-card rounded-lg p-6 text-center border border-border'>
+                <div className='bg-card rounded-2xl p-6 text-center border border-border shadow-sm'>
                     <h3 className='font-medium mb-2 text-foreground text-sm'>
                         No upcoming meetings
                     </h3>
@@ -80,14 +80,14 @@ function UpcomingMeetings({
             ) : (
                 <div className='space-y-3'>
                     <Button
-                        className='w-full px-3 py-2 bg-muted rounded-lg hover:bg-muted/80 disabled:opacity-50 transition-colors text-foreground text-sm mb-4 cursor-pointer'
+                        className='w-full px-3 py-2 bg-muted hover:bg-muted/80 rounded-xl border border-border disabled:opacity-50 transition-colors text-foreground text-sm mb-4 cursor-pointer'
                         onClick={onRefresh}
                         disabled={loading}
                     >
                         {loading ? 'Loading...' : 'Refresh'}
                     </Button>
                     {upcomingEvents.map((event) => (
-                        <div key={event.id} className='bg-card rounded-lg p-3 border border-border hover:shadow-md transition-shadow relative'>
+                        <div key={event.id} className='bg-card rounded-2xl p-4 border border-border shadow-sm hover:border-[#5B5CEB]/30 hover:shadow-md transition-all duration-200 relative'>
                             <div className='absolute top-3 right-3'>
                                 <Switch
                                     checked={!!botToggles[event.id]}
@@ -98,8 +98,8 @@ function UpcomingMeetings({
                             </div>
                             <h4 className='font-medium text-sm text-foreground mb-2 pr-12'>{event.summary || 'No Title'}</h4>
                             <div className='space-y-1 text-xs text-muted-foreground'>
-                                <div className='flex items-center gap-1'>
-                                    <Clock className='w-3 h-3' />
+                                <div className='flex items-center gap-1.5'>
+                                    <Clock className='w-3.5 h-3.5 text-[#5B5CEB]' />
                                     {format(new Date(event.start?.dateTime || event.start?.date || ''), 'MMM d, h:mm a')}
                                 </div>
                                 {event.attendees && (
@@ -112,7 +112,7 @@ function UpcomingMeetings({
                                     target='_blank'
                                     rel='noopener noreferrer'
                                 >
-                                    <Button className='mt-2 w-full px-2 py-1 bg-primary text-primary-foreground text-xs rounded hover:bg-primary/90 transition-colors h-6 cursor-pointer'>
+                                    <Button className='mt-3 w-full px-3 py-1 bg-[#5B5CEB] hover:bg-[#4F46E5] text-white text-xs font-semibold rounded-xl shadow-xs transition-colors h-7 cursor-pointer'>
                                         Join Meeting
                                     </Button>
                                 </a>
