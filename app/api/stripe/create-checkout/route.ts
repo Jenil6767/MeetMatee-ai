@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db'
 import { auth, currentUser } from '@clerk/nextjs/server'
-import { NextRequest, NextResponse } from 'next/server'
+import Stripe from 'stripe'
 export const dynamic = 'force-dynamic'
 
 const stripeKey = process.env.STRIPE_SECRET_KEY || 'sk_test_dummy_key_for_build'
