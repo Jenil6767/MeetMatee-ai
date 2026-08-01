@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db"
 import { NextResponse } from "next/server"
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
     try {
         const url = new URL(request.url)
@@ -18,7 +20,15 @@ export async function GET(request: Request) {
             return NextResponse.redirect(new URL('/home?error=oauth_failed', request.url))
         }
 
-        const { userId } = JSON.parse(Buffer.from(state, 'base64').toString())
+        let userId: string
+        try {
+            const decoded = Buffer.from(state, 'base64').toString()
+            const parsed = JSON.parse(decoded)
+            userId = parsed.userId
+        } catch (e) {
+            console.error('invalid state parameter', e)
+            return NextResponse.redirect(new URL('/home?error=invalid_state', request.url))
+        }
         const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
             method: 'POST',
             headers: {
