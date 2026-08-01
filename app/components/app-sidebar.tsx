@@ -1,9 +1,12 @@
-import { Bot, DollarSign, Home, Layers3, Settings } from "lucide-react";
+import { Bot, DollarSign, Home, Layers3, Moon, Settings, Sun } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useUsage } from "../contexts/UsageContext";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const items = [
     {
@@ -36,6 +39,12 @@ const items = [
 export function AppSidebar() {
     const pathname = usePathname()
     const { usage, limits } = useUsage()
+    const { theme, setTheme } = useTheme()
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     const meetingProgress = usage && limits.meetings !== -1
         ? Math.min((usage.meetingsThisMonth / limits.meetings) * 100, 100)
@@ -89,15 +98,33 @@ export function AppSidebar() {
 
     return (
         <Sidebar collapsible="none" className="border-r border-sidebar-border h-screen">
-            <SidebarHeader className="border-b border-sidebar-border p-4">
-                <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                        <Bot className="w-4 h-4" />
-                    </div>
-                    <span className="text-lg font-semibold text-sidebar-foreground">
-                        MeetingBot
-                    </span>
-                </div>
+            <SidebarHeader className="border-b border-sidebar-border p-4 flex flex-row items-center justify-between">
+                <Link href="/" className="flex items-center gap-2">
+                    <Image
+                        src="/meet_matee.png"
+                        alt="MeetMatee Logo"
+                        width={160}
+                        height={40}
+                        priority
+                        unoptimized
+                        className="h-9 w-auto object-contain"
+                    />
+                </Link>
+                {mounted && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                        className="h-8 w-8 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer transition-colors"
+                        title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
+                    >
+                        {theme === 'dark' ? (
+                            <Sun className="w-4 h-4 text-yellow-500" />
+                        ) : (
+                            <Moon className="w-4 h-4 text-blue-500" />
+                        )}
+                    </Button>
+                )}
             </SidebarHeader>
 
             <SidebarContent className="flex-1 p-4">
