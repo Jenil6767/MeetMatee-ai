@@ -7,9 +7,6 @@ import { SignOutButton, useAuth, useUser } from '@clerk/nextjs'
 import { Bot, LogOut, Save, Upload, User } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
-import { motion } from 'framer-motion'
-import { fadeUp } from '@/lib/design-system/animations'
-
 function Settings() {
 
     const { user } = useUser()
@@ -120,16 +117,16 @@ function Settings() {
 
     const getPlanColor = (plan: string) => {
         return plan.toLowerCase() === 'free'
-            ? 'bg-secondary text-secondary-foreground border border-border'
-            : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+            ? 'bg-gray-500/20 text-gray-400'
+            : 'bg-green-500/20 text-green-400'
     }
 
     if (isLoading) {
         return (
             <div className='min-h-screen bg-background flex items-center justify-center p-6'>
                 <div className='flex flex-col items-center justify-center'>
-                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-[#5B5CEB] mb-4'></div>
-                    <div className='text-foreground font-medium'>Loading Settings...</div>
+                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-foreground mb-4'></div>
+                    <div className='text-foreground'>Loading Settings...</div>
                 </div>
             </div>
         )
@@ -138,17 +135,13 @@ function Settings() {
 
     return (
         <div className='min-h-screen bg-background p-6'>
-            <motion.div
-                initial="initial"
-                animate="animate"
-                variants={fadeUp}
-                className='max-w-2xl mx-auto'
-            >
-                <h1 className='text-2xl font-bold text-foreground mb-8 text-center tracking-tight'>Settings</h1>
-                <div className='relative bg-card rounded-2xl p-6 border border-border mb-8 shadow-sm'>
+            <div className='max-w-2xl mx-auto'>
+                <h1 className='text-2xl font-bold text-foreground mb-8 text-center'>Settings</h1>
+                <div className='relative bg-card/80 backdrop-blur-sm rounded-lg p-6 border border-border/50 mb-8 shadow-xl shadow-black/10'>
+                    <div className='absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-lg pointer-events-none'></div>
                     <div className='relative'>
                         <div className='flex items-center gap-4 mb-4'>
-                            <div className='w-16 h-16 rounded-full flex-shrink-0 overflow-hidden ring-2 ring-[#5B5CEB]/20'>
+                            <div className='w-16 h-16 rounded-full flex-shrink-0 overflow-hidden ring-2 ring-primary/20'>
                                 {user?.imageUrl ? (
                                     <img
                                         src={user.imageUrl}
@@ -156,8 +149,8 @@ function Settings() {
                                         className='w-16 h-16 rounded-full object-cover'
                                     />
                                 ) : (
-                                    <div className='w-16 h-16 bg-[#5B5CEB]/10 rounded-full flex items-center justify-center '>
-                                        <User className='h-8 w-8 text-[#5B5CEB]' />
+                                    <div className='w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center '>
+                                        <User className='h-8 w-8 text-primary' />
                                     </div>
                                 )}
                             </div>
@@ -168,14 +161,14 @@ function Settings() {
                         </div>
                         <div className='flex justify-between items-start '>
                             <div>
-                                <span className='text-xs bg-muted text-muted-foreground px-2.5 py-0.5 rounded-full font-semibold tracking-wider uppercase border border-border'>
+                                <span className='text-sm bg-muted/80 text-muted-foreground px-2 py-1 rounded-full'>
                                     EMAIL
                                 </span>
-                                <p className='text-sm text-foreground mt-1.5 font-medium'>
+                                <p className='text-sm text-foreground mt-1'>
                                     {user?.primaryEmailAddress?.emailAddress || 'No email'}
                                 </p>
                             </div>
-                            <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${getPlanColor(userPlan)}`}>
+                            <span className={`text-xs px-2 py-1 rounded-full ${getPlanColor(userPlan)}`}>
                                 {getPlanDisplayName(userPlan)}
 
                             </span>
@@ -186,7 +179,7 @@ function Settings() {
 
                 </div>
 
-                <div className='bg-card rounded-2xl p-6 border border-border shadow-sm'>
+                <div className='bg-card rounded-lg p-6 border border-border'>
                     <h3 className='text-lg font-semibold text-foreground mb-4'>Bot Customization</h3>
 
                     <div className='mb-6'>
@@ -200,7 +193,6 @@ function Settings() {
                             value={botName}
                             onChange={handleBotNameChange}
                             placeholder='Enter Bot Name...'
-                            className='rounded-xl border-border focus:border-[#5B5CEB]'
                         />
                     </div>
 
@@ -210,15 +202,15 @@ function Settings() {
                         </Label>
 
                         <div className='flex items-center gap-4'>
-                            <div className='w-20 h-20 bg-[#5B5CEB]/10 rounded-2xl flex items-center justify-center overflow-hidden border border-[#5B5CEB]/20'>
+                            <div className='w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center overflow-hidden'>
                                 {botImageUrl ? (
                                     <img
                                         src={botImageUrl}
                                         alt='Bot Avatar'
-                                        className='w-20 h-20 rounded-2xl object-cover'
+                                        className='w-20 h-20 rounded-full object-cover'
                                     />
                                 ) : (
-                                    <Bot className='h-10 w-10 text-[#5B5CEB]' />
+                                    <Bot className='h-10 w-10 text-primary' />
                                 )}
                             </div>
 
@@ -234,14 +226,14 @@ function Settings() {
 
                                 <Label
                                     htmlFor='bot-image-upload'
-                                    className={`inline-flex items-center gap-2 px-4 py-2 bg-muted text-foreground border border-border rounded-xl hover:bg-muted/80 transition-colors cursor-pointer text-sm font-medium ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    className={`inline-flex items-center gap-2 px-3 py-2 bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors cursor-pointer ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 >
-                                    <Upload className='h-4 w-4 text-[#5B5CEB]' />
+                                    <Upload className='h-4 w-4' />
                                     {isUploading ? 'Uploading...' : 'Upload Image'}
 
                                 </Label>
 
-                                <p className='text-xs text-muted-foreground mt-1.5'>
+                                <p className='text-xs text-muted-foreground mt-1'>
                                     JPG or PNG
                                 </p>
 
@@ -255,7 +247,7 @@ function Settings() {
                         <Button
                             onClick={saveBotSettings}
                             disabled={isSaving}
-                            className='inline-flex items-center gap-2 mb-6 cursor-pointer bg-[#5B5CEB] hover:bg-[#4F46E5] text-white rounded-xl shadow-sm'
+                            className='inline-flex items-center gap-2 mb-6 cursor-pointer'
                         >
                             <Save className='h-4 w-4' />
                             {isSaving ? 'Saving...' : 'Save Changes'}
@@ -266,7 +258,7 @@ function Settings() {
                         <SignOutButton>
                             <Button
                                 variant='destructive'
-                                className='inline-flex items-center gap-2 cursor-pointer rounded-xl'
+                                className='inline-flex items-center gap-2 cursor-pointer'
                             >
                                 <LogOut className='h-4 w-4' />
                                 Sign Out
@@ -277,7 +269,9 @@ function Settings() {
 
                 </div>
 
-            </motion.div>
+
+
+            </div>
 
         </div>
     )

@@ -20,9 +20,9 @@ function ChatMessages({
         <div className='space-y-4'>
             {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-                    <div className={`max-w-[75%] rounded-2xl p-4 shadow-xs ${message.isBot
+                    <div className={`max-w-[70%] rounded-lg p-4 ${message.isBot
                         ? 'bg-card border border-border text-foreground'
-                        : 'bg-gradient-to-r from-[#5B5CEB] to-[#4F46E5] text-white'
+                        : 'bg-primary text-primary-foreground'
                         }`}>
                         <p className='text-sm leading-relaxed'>{message.content}</p>
 
@@ -33,8 +33,8 @@ function ChatMessages({
 
             {isLoading && (
                 <div className='flex justify-start'>
-                    <div className='bg-card border border-border rounded-2xl p-4 shadow-sm'>
-                        <p className='text-sm text-muted-foreground font-medium animate-pulse'>🤖 Searching through all your meetings...</p>
+                    <div className='bg-card border border-border rounded-lg p-4'>
+                        <p className='text-sm text-muted-foreground'>🤖 Searching through all your meetings...</p>
 
                     </div>
 

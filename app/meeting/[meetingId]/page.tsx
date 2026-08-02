@@ -58,9 +58,9 @@ function MeetingDetail() {
                             <Button
                                 variant='ghost'
                                 onClick={() => setActiveTab('summary')}
-                                className={`px-5 py-2.5 text-sm font-semibold border-b-2 rounded-none shadow-none transition-colors
+                                className={`px-4 py-2 text-sm font-medium border-b-2 rounded-none shadow-none transition-colors
                                 ${activeTab === 'summary'
-                                        ? 'border-[#5B5CEB] text-[#5B5CEB]'
+                                        ? 'border-primary text-primary'
                                         : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/50'
                                     }`}
                                 style={{ boxShadow: 'none' }}
@@ -71,9 +71,9 @@ function MeetingDetail() {
                             <Button
                                 variant='ghost'
                                 onClick={() => setActiveTab('transcript')}
-                                className={`px-5 py-2.5 text-sm font-semibold border-b-2 rounded-none shadow-none transition-colors
+                                className={`px-4 py-2 text-sm font-medium border-b-2 rounded-none shadow-none transition-colors
                                 ${activeTab === 'transcript'
-                                        ? 'border-[#5B5CEB] text-[#5B5CEB]'
+                                        ? 'border-primary text-primary'
                                         : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/50'
                                     }`}
                                 style={{ boxShadow: 'none' }}
@@ -87,14 +87,14 @@ function MeetingDetail() {
                             {activeTab === 'summary' && (
                                 <div>
                                     {loading ? (
-                                        <div className='bg-card border border-border rounded-2xl p-8 text-center shadow-sm'>
-                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-[#5B5CEB] mx-auto mb-4'></div>
-                                            <p className='text-muted-foreground font-medium'>Loading meeting data..</p>
+                                        <div className='bg-card border border-border rounded-lg p-6 text-center'>
+                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4'></div>
+                                            <p className='text-muted-foreground'>Loading meeting data..</p>
                                         </div>
                                     ) : meetingData?.processed ? (
                                         <div className='space-y-6'>
                                             {meetingData.summary && (
-                                                <div className='bg-card border border-border rounded-2xl p-6 shadow-sm'>
+                                                <div className='bg-card border border-border rounded-lg p-6'>
                                                     <h3 className='text-lg font-semibold text-foreground mb-3'>Meeting Summary</h3>
                                                     <p className='text-muted-foreground leading-relaxed'>
                                                         {meetingData.summary}
@@ -103,7 +103,7 @@ function MeetingDetail() {
                                             )}
 
                                             {!userChecked ? (
-                                                <div className='bg-card border border-border rounded-2xl p-6 shadow-sm'>
+                                                <div className='bg-card border border-border rounded-lg p-6'>
                                                     <div className='animate-pulse'>
                                                         <div className='h-4 bg-muted rounded w-1/4 mb-4'></div>
                                                         <div className='space-y-2'>
@@ -124,14 +124,14 @@ function MeetingDetail() {
                                                     )}
 
                                                     {!isOwner && displayActionItems.length > 0 && (
-                                                        <div className='bg-card rounded-2xl p-6 border border-border shadow-sm'>
+                                                        <div className='bg-card rounded-lg p-6 border border-border'>
                                                             <h3 className='text-lg font-semibold text-foreground mb-4'>
                                                                 Action Items
                                                             </h3>
                                                             <div className='space-y-3'>
                                                                 {displayActionItems.map((item) => (
                                                                     <div key={item.id} className='flex items-start gap-3'>
-                                                                        <div className='w-2 h-2 rounded-full bg-[#5B5CEB] mt-2 flex-shrink-0'></div>
+                                                                        <div className='w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0'></div>
                                                                         <p className='text-sm text-foreground'>{item.text}</p>
 
                                                                     </div>
@@ -145,9 +145,9 @@ function MeetingDetail() {
                                             )}
                                         </div>
                                     ) : (
-                                        <div className='bg-card border border-border rounded-2xl p-8 text-center shadow-sm'>
-                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-[#5B5CEB] mx-auto mb-4'></div>
-                                            <p className='text-muted-foreground font-medium'>Processing meeting with AI..</p>
+                                        <div className='bg-card border border-border rounded-lg p-6 text-center'>
+                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4'></div>
+                                            <p className='text-muted-foreground'>Processing meeting with AI..</p>
                                             <p className='text-sm text-muted-foreground mt-2'>You'll receive an email when ready</p>
 
                                         </div>
@@ -158,14 +158,14 @@ function MeetingDetail() {
                             {activeTab === 'transcript' && (
                                 <div>
                                     {loading ? (
-                                        <div className='bg-card border border-border rounded-2xl p-8 text-center shadow-sm'>
-                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-[#5B5CEB] mx-auto mb-4'></div>
-                                            <p className='text-muted-foreground font-medium'>Loading meeting data..</p>
+                                        <div className='bg-card border border-border rounded-lg p-6 text-center'>
+                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4'></div>
+                                            <p className='text-muted-foreground'>Loading meeting data..</p>
                                         </div>
                                     ) : meetingData?.transcript ? (
                                         <TranscriptDisplay transcript={meetingData.transcript} />
                                     ) : (
-                                        <div className='bg-card rounded-2xl p-8 border border-border text-center shadow-sm'>
+                                        <div className='bg-card rounded-lg p-6 border border-border text-center'>
                                             <p className='text-muted-foreground'>No transcript avaialable</p>
                                         </div>
                                     )}

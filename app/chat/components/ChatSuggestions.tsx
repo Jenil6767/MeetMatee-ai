@@ -19,14 +19,14 @@ function ChatSuggestions({ suggestions, onSuggestionClick }: ChatSuggestionsProp
 
             </div>
 
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl'>
+            <div className='grid grid-cols-2 gap-4 w-full max-w-3xl'>
                 {suggestions.map((suggestion, index) => (
                     <button
                         key={index}
                         onClick={() => onSuggestionClick(suggestion)}
-                        className='p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-[#5B5CEB]/40 hover:bg-[#5B5CEB]/5 hover:shadow-md transition-all duration-200 text-left group cursor-pointer'
+                        className='p-4 bg-card border border-border rounded-lg hover:bg-primary/10 hover:border-primary/30 transition-colors text-left group'
                     >
-                        <p className='text-sm text-foreground group-hover:text-[#5B5CEB] transition-colors leading-relaxed font-medium'>
+                        <p className='text-sm text-foreground group-hover:text-primary transition-colors'>
                             ⚡️ {suggestion}
                         </p>
 
