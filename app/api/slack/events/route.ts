@@ -33,13 +33,10 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'invalid signature' }, { status: 401 })
         }
 
-        // ✅ Acknowledge Slack immediately (must respond within 3 seconds)
-        // Process the event in the background so the heavy RAG/OpenAI work doesn't block the response
-        app.processEvent({
+        // Await Slack event processing so Vercel Serverless execution context remains alive
+        await app.processEvent({
             body: bodyJson,
             ack: async () => { }
-        }).catch((err) => {
-            console.error('Background processEvent error:', err)
         })
 
         return NextResponse.json({ ok: true })
