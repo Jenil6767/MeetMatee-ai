@@ -3,11 +3,20 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar visually but keep scroll functionality */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 @theme inline {
+  --font-sans: var(--font-inter), var(--font-geist-sans), system-ui, sans-serif;
+  --font-bricolage: var(--font-bricolage), var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -124,5 +133,35 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.6;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-bricolage), system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  h4, h5, h6 {
+    font-family: var(--font-bricolage), system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  p {
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.6;
+  }
+  button, .btn {
+    font-weight: 600;
+  }
+  nav a, nav button {
+    font-weight: 500;
+  }
+  label {
+    font-weight: 500;
+  }
+  caption, figcaption, small {
+    font-weight: 400;
   }
 }

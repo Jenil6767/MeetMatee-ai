@@ -1,128 +1,131 @@
 'use client'
 
-import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { SignInButton, SignUpButton, useUser } from "@clerk/nextjs"
-import { ArrowRight, Bot, CheckCircle, ChevronRight, Play, Sparkles } from "lucide-react"
-import Link from "next/link"
+import Navbar from './Navbar'
+import { SignUpButton, useUser } from '@clerk/nextjs'
+import { motion } from 'framer-motion'
+import { CheckCircle2, ChevronsRight, Play, Sparkles } from 'lucide-react'
+import Link from 'next/link'
 
 export default function HeroSection() {
-    const { isSignedIn } = useUser()
-    return (
-        <>
-            <nav className="border-b border-gray-800 bg-black/80 backdrop-blur-sm sticky top-0 z-50">
-                <div className="max-w-6xl mx-auto px-4 py-4">
-                    <div className="flex justify-between items-center">
-                        <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                                <Bot className="w-5 h-5 text-white" />
+  const { isSignedIn } = useUser()
 
-                            </div>
-                            <span className="text-xl font-bold text-white">Meeting Bot</span>
+  return (
+    <>
+      <Navbar />
 
-                        </div>
-                        <div className="flex items-center gap-4">
-                            {isSignedIn ? (
-                                <Button asChild className="bg-blue-600 hover:bg-blue-700">
-                                    <Link href="/home">Dashboard</Link>
-                                </Button>
-                            ) : (
-                                <>
-                                    <SignInButton mode="modal">
-                                        <Button variant="outline" className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white cursor-pointer">
-                                            Sign In
-                                        </Button>
-                                    </SignInButton>
+      <section className="pt-[140px] md:pt-[170px] pb-12 md:pb-16 px-5 sm:px-8 max-w-[1280px] mx-auto overflow-hidden">
+        <div className="max-w-[850px] mx-auto text-center flex flex-col items-center">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            className="inline-flex items-center gap-2 bg-[#FFF2EA] border border-[#FF5A0A]/20 px-4 py-2 rounded-full mb-8 shadow-xs"
+          >
+            <Sparkles className="w-4 h-4 text-[#FF5A0A]" />
+            <span className="text-xs sm:text-sm font-semibold text-[#FF5A0A] tracking-tight">
+              AI-Powered Meeting Assistant
+            </span>
+          </motion.div>
 
-                                    <SignUpButton mode="modal">
-                                        <Button className="bg-blue-600 hover:bg-blue-700 cursor-pointer">
-                                            Get Started
-                                        </Button>
-                                    </SignUpButton>
-                                </>
+          {/* Hero Title */}
+          <motion.h1
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: 'easeOut' }}
+            className="text-[36px] sm:text-[52px] md:text-[68px] font-bold leading-[1.12] tracking-[-0.03em] text-[#111111] mb-6 text-center max-w-[850px]"
+          >
+            Make your meetings
+            <br />
+            more effective
+          </motion.h1>
 
-                            )}
+          {/* Hero Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
+            className="text-[15px] sm:text-[18px] md:text-[20px] font-normal leading-[1.6] tracking-[-0.01em] text-[#555555] max-w-[580px] text-center mb-8"
+          >
+            Experience crystal-clear video meetings and seamless connectivity—all in one intuitive platform.
 
-                        </div>
 
-                    </div>
+
+
+          </motion.p>
+
+          {/* Action Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: 'easeOut' }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-10"
+          >
+            {isSignedIn ? (
+              <Link
+                href="/home"
+                className="w-full sm:w-auto inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white font-semibold text-[15px] sm:text-[16px] h-[52px] px-6 rounded-[16px] shadow-sm hover:-translate-y-[3px] transition-all duration-300 group"
+              >
+                <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
+                  <ChevronsRight className="w-4 h-4" />
                 </div>
+                <span>Dashboard</span>
+              </Link>
+            ) : (
+              <SignUpButton mode="modal">
+                <button className="w-full sm:w-auto inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white font-semibold text-[15px] sm:text-[16px] h-[52px] px-6 rounded-[16px] shadow-sm hover:-translate-y-[3px] transition-all duration-300 group cursor-pointer">
+                  <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
+                    <ChevronsRight className="w-4 h-4" />
+                  </div>
+                  <span>Start Free Trial</span>
+                </button>
+              </SignUpButton>
+            )}
 
-            </nav>
+            <button className="w-full sm:w-auto inline-flex items-center justify-center bg-white hover:bg-[#fafafa] text-[#0D0D0D] font-semibold text-[15px] sm:text-[16px] h-[52px] px-6 rounded-[16px] border border-black/[0.12] shadow-xs hover:-translate-y-[3px] transition-all duration-300 group cursor-pointer">
+              <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
+                <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+              </div>
+              <span>Watch Demo</span>
+            </button>
+          </motion.div>
 
-            <section className="py-20 px-4 bg-black">
-                <div className="max-w-4xl mx-auto text-center">
-                    <div className="group relative mx-auto flex w-fit items-center justify-center rounded-full px-4 py-1.5 shadow-[inset_0_-8px_10px_#3b82f61f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#3b82f63f] mb-8">
-                        <span
-                            className={cn(
-                                "absolute inset-0 block h-full w-full animate-gradient rounded-[inherit] bg-gradient-to-r from-[#3b82f6]/50 via-[#1d4ed8]/50 to-[#3b82f6]/50 bg-[length:300%_100%] p-[1px]",
-                            )}
-                            style={{
-                                WebkitMask:
-                                    "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                                WebkitMaskComposite: "destination-out",
-                                mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                                maskComposite: "subtract",
-                                WebkitClipPath: "padding-box",
-                            }}
-                        />
-                        <Sparkles className="w-4 h-4 mr-2 text-blue-400" />
-                        <hr className="mx-2 h-4 w-px shrink-0 bg-neutral-500" />
-                        <AnimatedGradientText className="text-sm font-medium text-gray-300">
-                            AI-Powered Meeting Assistant
-                        </AnimatedGradientText>
-                        <ChevronRight
-                            className="ml-1 w-4 h-4 stroke-neutral-500 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5"
-                        />
-                    </div>
-                    <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                        Transform Your Meetings with{' '}
-                        <span className="bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600  bg-clip-text text-transparent">AI Magic</span>
-                    </h1>
-                    <p className="text-lg max-w-2xl mx-auto mb-8 bg-gradient-to-r from-gray-300 to-gray-500 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(156,163,175,0.3)]">
-                        Automatic summaries, action items, and intelligent insights for every meeting.
-                        Never miss important details again.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                        {isSignedIn ? (
-                            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 px-8 py-4" >
-                                <Link href="/home" className="group">
-                                    <span>Dashboard</span>
-                                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+          {/* Trust Indicators */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4, ease: 'easeOut' }}
+            className="flex flex-wrap items-center justify-center gap-5 sm:gap-8 text-xs sm:text-sm font-medium text-[#555555] mb-10 sm:mb-14"
+          >
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#FF5A0A]" />
+              <span>No credit card required</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#FF5A0A]" />
+              <span>Setup in 2 minutes</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#FF5A0A]" />
+              <span>Free forever plan</span>
+            </div>
+          </motion.div>
 
-                                </Link>
-                            </Button>
-                        ) : (
-                            <SignUpButton mode="modal">
-                                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 px-8 py-4 group cursor-pointer">
-                                    <span>Start Free Trial</span>
-                                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                                </Button>
-                            </SignUpButton>
-                        )}
-
-                        <Button variant="outline" size="lg" className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white px-8 py-4 cursor-pointer">
-                            <Play className="w-5 h-5 mr-2" />
-                            <span>Watch Demo</span>
-                        </Button>
-                    </div>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-gray-500">
-                        <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-400" />
-                            <span>No credit card required</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-400" />
-                            <span>Setup in 2 minutes</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-400" />
-                            <span>Free forever plan</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </>
-    )
+          {/* Hero Section Image Showcase (/hero image.png) */}
+          <motion.div
+            initial={{ opacity: 0, y: 35 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: 'easeOut' }}
+            className="w-full max-w-[1150px] mx-auto"
+          >
+            <img
+              src="/hero image.png"
+              alt="MeetMatee Platform Preview"
+              className="w-full h-auto rounded-[20px] sm:rounded-[28px] md:rounded-[36px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-black/[0.06] object-contain transition-transform duration-700 hover:scale-[1.005]"
+            />
+          </motion.div>
+        </div>
+      </section>
+    </>
+  )
 }
