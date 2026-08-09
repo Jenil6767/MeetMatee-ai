@@ -1,75 +1,36 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
-import { motion, useInView, animate } from 'framer-motion'
-import { staggerContainer, staggerItem } from '@/lib/design-system/animations'
+import { motion } from 'framer-motion'
 
-function AnimatedStatDigit({ target, suffix = '', decimals = 0 }: { target: number; suffix?: string; decimals?: number }) {
-    const ref = useRef<HTMLSpanElement>(null)
-    const isInView = useInView(ref, { once: true, margin: "-50px" })
-    const [count, setCount] = useState(0)
+const stats = [
+  { value: '2+', label: 'Happy Users' },
+  { value: '99.69%', label: 'Uptime' },
+  { value: '2min', label: 'Setup Time' },
+  { value: '50hrs', label: 'Saved Per Month' },
+]
 
-    useEffect(() => {
-        if (isInView) {
-            const controls = animate(0, target, {
-                duration: 1.5,
-                ease: [0.16, 1, 0.3, 1],
-                onUpdate(value) {
-                    setCount(Number(value.toFixed(decimals)))
-                }
-            })
-            return () => controls.stop()
-        }
-    }, [isInView, target, decimals])
-
-    return (
-        <span ref={ref}>
-            {decimals > 0 ? count.toFixed(decimals) : count}{suffix}
-        </span>
-    )
-}
-
-function StatsSection() {
-    return (
-
-        <section className='py-20 bg-background text-foreground relative overflow-hidden'>
-            <div className='max-w-6xl mx-auto px-4'>
-                <motion.div
-                    variants={staggerContainer}
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={{ once: true }}
-                    className='grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-border'
-                >
-                    <motion.div variants={staggerItem} className='text-center group'>
-                        <div className='text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-[#5B5CEB] via-[#6366F1] to-[#3B82F6] bg-clip-text text-transparent mb-2'>
-                            <AnimatedStatDigit target={2} suffix="+" />
-                        </div>
-                        <p className='text-muted-foreground font-medium text-sm'>Happy Users</p>
-                    </motion.div>
-                    <motion.div variants={staggerItem} className='text-center group'>
-                        <div className='text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-[#5B5CEB] via-[#6366F1] to-[#3B82F6] bg-clip-text text-transparent mb-2'>
-                            <AnimatedStatDigit target={99.69} suffix="%" decimals={2} />
-                        </div>
-                        <p className='text-muted-foreground font-medium text-sm'>Uptime</p>
-                    </motion.div>
-                    <motion.div variants={staggerItem} className='text-center group'>
-                        <div className='text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-[#5B5CEB] via-[#6366F1] to-[#3B82F6] bg-clip-text text-transparent mb-2'>
-                            <AnimatedStatDigit target={2} suffix="min" />
-                        </div>
-                        <p className='text-muted-foreground font-medium text-sm'>Setup Time</p>
-                    </motion.div>
-                    <motion.div variants={staggerItem} className='text-center group'>
-                        <div className='text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-[#5B5CEB] via-[#6366F1] to-[#3B82F6] bg-clip-text text-transparent mb-2'>
-                            <AnimatedStatDigit target={50} suffix="hrs" />
-                        </div>
-                        <p className='text-muted-foreground font-medium text-sm'>Saved Per Month</p>
-                    </motion.div>
-                </motion.div>
-
+export default function StatsSection() {
+  return (
+    <section className="py-12 md:py-16 px-5 sm:px-8 max-w-[1280px] mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+        {stats.map((stat, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
+            className="bg-white rounded-[24px] border border-black/[0.08] p-6 sm:p-8 shadow-[0_12px_40px_rgba(0,0,0,0.06)] text-center hover:-translate-y-2 transition-all duration-300"
+          >
+            <div className="text-[32px] sm:text-[40px] md:text-[44px] font-extrabold text-[#FF5A0A] tracking-tight leading-none mb-2">
+              {stat.value}
             </div>
-        </section>
-    )
+            <p className="text-[14px] sm:text-[15px] font-medium text-[#555555]">
+              {stat.label}
+            </p>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  )
 }
-
-export default StatsSection

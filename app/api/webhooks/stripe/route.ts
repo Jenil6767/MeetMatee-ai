@@ -2,15 +2,12 @@ import { prisma } from "@/lib/db";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-export const dynamic = 'force-dynamic'
 
-const stripeKey = process.env.STRIPE_SECRET_KEY || 'sk_test_dummy_key_for_build'
-
-const stripe = new Stripe(stripeKey, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: '2025-06-30.basil'
 })
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || 'whsec_dummy'
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
 
 export async function POST(request: NextRequest) {
     try {
@@ -28,6 +25,9 @@ export async function POST(request: NextRequest) {
         }
 
         switch (event.type) {
+            case 'checkout.session.completed':
+                await handleCheckoutCompleted(event.data.object)
+                break
             case 'customer.subscription.created':
                 await handleSubscriptionCreated(event.data.object)
                 break
@@ -49,6 +49,39 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         console.error('error handling subscription create:', error)
         return NextResponse.json({ error: 'webhook failed' }, { status: 500 })
+    }
+}
+
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+    try {
+        const customerId = session.customer as string
+        const planName = (session.metadata?.planName || '').toLowerCase().trim()
+
+        if (!planName || !['starter', 'pro', 'premium'].includes(planName)) {
+            console.error('checkout.session.completed: missing or invalid planName in metadata', session.metadata)
+            return
+        }
+
+        const user = await prisma.user.findFirst({ where: { stripeCustomerId: customerId } })
+
+        if (user) {
+            await prisma.user.update({
+                where: { id: user.id },
+                data: {
+                    currentPlan: planName,
+                    subscriptionStatus: 'active',
+                    stripeSubscriptionId: session.subscription as string,
+                    billingPeriodStart: new Date(),
+                    meetingsThisMonth: 0,
+                    chatMessagesToday: 0
+                }
+            })
+            console.log(`checkout completed: user=${user.id} plan=${planName}`)
+        } else {
+            console.error(`checkout.session.completed: no user found for customerId=${customerId}`)
+        }
+    } catch (error) {
+        console.error('error handling checkout.session.completed:', error)
     }
 }
 
@@ -77,6 +110,9 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
                     chatMessagesToday: 0
                 }
             })
+            console.log(`subscription created: user=${user.id} plan=${planName}`)
+        } else {
+            console.error(`no user found for stripeCustomerId=${customerId}`)
         }
     } catch (error) {
         console.error('error handling subscription create:', error)
@@ -164,13 +200,20 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
 
 
 function getPlanFromSubscription(subscription: Stripe.Subscription) {
-    const priceId = subscription.items.data[0]?.price.id
-
-    const priceToPlank: Record<string, string> = {
-        'price_1RpqPqPM25qIcCJyMdRhoNah': 'starter',
-        'price_1RpqPqPM25qIcCJyWkSDTdKN': 'pro',
-        'price_1RpqPqPM25qIcCJyXD9K1yKM': 'premium'
+    // Prefer metadata set at checkout (most reliable)
+    const metaPlan = subscription.metadata?.planName?.toLowerCase().trim()
+    if (metaPlan === 'starter' || metaPlan === 'pro' || metaPlan === 'premium') {
+        return metaPlan
     }
 
-    return priceToPlank[priceId] || 'invalid'
+    const priceId = subscription.items.data[0]?.price.id
+
+    // Must match NEXT_PUBLIC_STRIPE_*_MONTHLY in .env — do not hardcode old price IDs
+    const priceToPlan: Record<string, string> = {
+        [process.env.NEXT_PUBLIC_STRIPE_STARTER_MONTHLY!]: 'starter',
+        [process.env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY!]: 'pro',
+        [process.env.NEXT_PUBLIC_STRIPE_PREMIUM_MONTHLY!]: 'premium',
+    }
+
+    return (priceId && priceToPlan[priceId]) || 'free'
 }

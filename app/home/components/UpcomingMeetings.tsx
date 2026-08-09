@@ -1,128 +1,183 @@
+'use client'
+
 import React from 'react'
 import { CalendarEvent } from '../hooks/useMeetings'
-import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
-import { Clock } from 'lucide-react'
+import { Calendar, CheckCircle2, Clock, RefreshCw } from 'lucide-react'
 import { format } from 'date-fns'
 
 interface UpcomingMeetingsProps {
-    upcomingEvents: CalendarEvent[]
-    connected: boolean
-    error: string
-    loading: boolean
-    initialLoading: boolean
-    botToggles: { [key: string]: boolean }
-    onRefresh: () => void
-    onToggleBot: (eventId: string) => void
-    onConnectCalendar: () => void
+  upcomingEvents: CalendarEvent[]
+  connected: boolean
+  error: string
+  loading: boolean
+  initialLoading: boolean
+  botToggles: { [key: string]: boolean }
+  onRefresh: () => void
+  onToggleBot: (eventId: string) => void
+  onConnectCalendar: () => void
 }
 
 function UpcomingMeetings({
-    upcomingEvents,
-    connected,
-    error,
-    loading,
-    initialLoading,
-    botToggles,
-    onRefresh,
-    onToggleBot,
-    onConnectCalendar
+  upcomingEvents,
+  connected,
+  error,
+  loading,
+  initialLoading,
+  botToggles,
+  onRefresh,
+  onToggleBot,
+  onConnectCalendar,
 }: UpcomingMeetingsProps) {
-    return (
-        <div>
-            <div className='flex justify-between items-center mb-6'>
-                <h2 className='text-xl font-bold text-foreground'>Upcoming</h2>
-                <span className='text-sm text-muted-foreground'>({upcomingEvents.length})</span>
-            </div>
-
-            {error && (
-                <div className='bg-destructive/15 border border-destructive/20 text-destructive px-4 py-3 rounded-2xl mb-6 text-sm'>
-                    {error}
-                </div>
-            )}
-
-            {initialLoading ? (
-                <div className='bg-card rounded-2xl p-6 border border-border shadow-sm'>
-                    <div className='animate-pulse'>
-                        <div className='w-12 h-12 mx-auto bg-muted rounded-full mb-3'></div>
-                        <div className='h-4 bg-muted rounded w-3/4 mx-auto mb-2'></div>
-                        <div className='h-3 bg-muted rounded w-1/2 mx-auto mb-4'></div>
-                        <div className='h-8 bg-muted rounded w-full'></div>
-                    </div>
-                </div>
-            ) : !connected ? (
-                <div className='bg-card rounded-2xl p-6 text-center border border-border shadow-sm'>
-                    <div className='w-12 h-12 mx-auto bg-[#5B5CEB]/10 text-[#5B5CEB] rounded-2xl flex items-center justify-center mb-3 text-xl'>
-                        📆
-                    </div>
-                    <h3 className='font-semibold mb-2 text-foreground text-sm'>Connect Calendar</h3>
-                    <p className='text-muted-foreground mb-4 text-xs leading-relaxed'>
-                        Connect Google Calendar to see upcoming meetings
-                    </p>
-
-                    <Button
-                        onClick={onConnectCalendar}
-                        disabled={loading}
-                        className='w-full px-4 py-2.5 bg-[#5B5CEB] hover:bg-[#4F46E5] text-white rounded-xl shadow-sm disabled:opacity-50 transition-all text-sm cursor-pointer'
-                    >
-                        {loading ? 'Connecting' : 'Connect Google Calendar'}
-                    </Button>
-                </div>
-            ) : upcomingEvents.length === 0 ? (
-                <div className='bg-card rounded-2xl p-6 text-center border border-border shadow-sm'>
-                    <h3 className='font-medium mb-2 text-foreground text-sm'>
-                        No upcoming meetings
-                    </h3>
-                    <p className='text-muted-foreground text-xs '>
-                        Your caledar is clear!
-                    </p>
-                </div>
-            ) : (
-                <div className='space-y-3'>
-                    <Button
-                        className='w-full px-3 py-2 bg-muted hover:bg-muted/80 rounded-xl border border-border disabled:opacity-50 transition-colors text-foreground text-sm mb-4 cursor-pointer'
-                        onClick={onRefresh}
-                        disabled={loading}
-                    >
-                        {loading ? 'Loading...' : 'Refresh'}
-                    </Button>
-                    {upcomingEvents.map((event) => (
-                        <div key={event.id} className='bg-card rounded-2xl p-4 border border-border shadow-sm hover:border-[#5B5CEB]/30 hover:shadow-md transition-all duration-200 relative'>
-                            <div className='absolute top-3 right-3'>
-                                <Switch
-                                    checked={!!botToggles[event.id]}
-                                    onCheckedChange={() => onToggleBot(event.id)}
-                                    aria-label='Toggle bot for this meeting'
-                                    className='cursor-pointer'
-                                />
-                            </div>
-                            <h4 className='font-medium text-sm text-foreground mb-2 pr-12'>{event.summary || 'No Title'}</h4>
-                            <div className='space-y-1 text-xs text-muted-foreground'>
-                                <div className='flex items-center gap-1.5'>
-                                    <Clock className='w-3.5 h-3.5 text-[#5B5CEB]' />
-                                    {format(new Date(event.start?.dateTime || event.start?.date || ''), 'MMM d, h:mm a')}
-                                </div>
-                                {event.attendees && (
-                                    <div>👥 {event.attendees.length} attendees</div>
-                                )}
-                            </div>
-                            {(event.hangoutLink || event.location) && (
-                                <a
-                                    href={event.hangoutLink || event.location || '#'}
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                >
-                                    <Button className='mt-3 w-full px-3 py-1 bg-[#5B5CEB] hover:bg-[#4F46E5] text-white text-xs font-semibold rounded-xl shadow-xs transition-colors h-7 cursor-pointer'>
-                                        Join Meeting
-                                    </Button>
-                                </a>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            )}
+  return (
+    <div className="space-y-6">
+      {/* Calendar Connection Status Card */}
+      <div className="bg-white rounded-[24px] border border-black/[0.08] p-6 shadow-[0_12px_40px_rgba(0,0,0,0.06)]">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-12 h-12 rounded-[16px] bg-[#FFF2EA] text-[#FF5A0A] flex items-center justify-center shrink-0 border border-[#FF5A0A]/20">
+            <Calendar className="w-6 h-6" />
+          </div>
+          <div>
+            <h3 className="text-base font-semibold text-[#111111] tracking-[-0.02em]">
+              Google Calendar
+            </h3>
+            <p className="text-xs text-[#5A5A5A] font-normal tracking-[-0.01em]">Auto-sync meetings with AI bots</p>
+          </div>
         </div>
-    )
+
+        {connected ? (
+          <div className="p-3.5 bg-[#18A957]/10 border border-[#18A957]/20 rounded-[16px] flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs font-semibold text-[#18A957]">
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Calendar Connected</span>
+            </div>
+            <button
+              onClick={onConnectCalendar}
+              disabled={loading}
+              className="text-[11px] font-semibold text-[#5A5A5A] hover:text-[#FF5A0A] underline cursor-pointer"
+            >
+              Reconnect
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <p className="text-xs text-[#5A5A5A] font-normal tracking-[-0.01em] leading-[1.6]">
+              Connect your Google Calendar so AI bots can automatically join and record your scheduled meetings.
+            </p>
+            <button
+              onClick={onConnectCalendar}
+              disabled={loading}
+              className="w-full h-[46px] bg-[#0F0F10] hover:bg-black text-white text-xs font-semibold rounded-[14px] shadow-sm hover:-translate-y-[2px] transition-all cursor-pointer disabled:opacity-50"
+            >
+              {loading ? 'Connecting...' : 'Connect Google Calendar'}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Upcoming Events List Container */}
+      <div className="bg-white rounded-[24px] border border-black/[0.08] p-6 shadow-[0_12px_40px_rgba(0,0,0,0.06)]">
+        <div className="flex justify-between items-center mb-5 pb-4 border-b border-black/[0.06]">
+          <div>
+            <h3 className="text-base font-semibold text-[#111111] tracking-[-0.02em]">
+              Upcoming Meetings
+            </h3>
+            <p className="text-xs text-[#808080] font-normal tracking-[-0.01em]">Scheduled calendar events</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold bg-[#FFF2EA] text-[#FF5A0A] px-2.5 py-1 rounded-full">
+              {upcomingEvents.length} events
+            </span>
+            <button
+              onClick={onRefresh}
+              disabled={loading}
+              className="p-1.5 bg-[#F8F6F1] hover:bg-[#FFF2EA] text-[#5A5A5A] hover:text-[#FF5A0A] rounded-[10px] border border-black/[0.08] transition-colors cursor-pointer"
+              title="Refresh events"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+        </div>
+
+        {error && (
+          <div className="bg-[#E5484D]/10 border border-[#E5484D]/20 text-[#E5484D] px-4 py-3 rounded-[16px] mb-5 text-xs font-medium">
+            {error}
+          </div>
+        )}
+
+        {initialLoading ? (
+          <div className="p-4 animate-pulse text-center space-y-2">
+            <div className="h-4 bg-[#F4EFE5] rounded w-3/4 mx-auto" />
+            <div className="h-3 bg-[#F4EFE5] rounded w-1/2 mx-auto" />
+          </div>
+        ) : upcomingEvents.length === 0 ? (
+          <div className="text-center py-6">
+            <div className="w-10 h-10 mx-auto bg-[#F8F6F1] rounded-full flex items-center justify-center mb-2 text-base">
+              🎉
+            </div>
+            <h4 className="font-semibold text-[#111111] text-xs mb-1">
+              No upcoming meetings
+            </h4>
+            <p className="text-[#808080] text-[11px]">Your calendar is clear!</p>
+          </div>
+        ) : (
+          <div className="space-y-3.5">
+            {upcomingEvents.map((event) => (
+              <div
+                key={event.id}
+                className="bg-[#F8F6F1]/60 rounded-[18px] p-4 border border-black/[0.06] hover:bg-[#F8F6F1] transition-all relative"
+              >
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <h4 className="font-bold text-sm text-[#111111] leading-snug">
+                    {event.summary || 'Untitled Meeting'}
+                  </h4>
+                  <div className="shrink-0 flex items-center gap-1.5" title="Toggle AI Bot">
+                    <span className="text-[10px] font-semibold text-[#808080]">Bot</span>
+                    <Switch
+                      checked={!!botToggles[event.id]}
+                      onCheckedChange={() => onToggleBot(event.id)}
+                      aria-label="Toggle bot for this meeting"
+                      className="cursor-pointer"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5 text-xs text-[#5A5A5A] mb-3">
+                  <div className="flex items-center gap-1.5 font-medium">
+                    <Clock className="w-3.5 h-3.5 text-[#FF5A0A]" />
+                    <span>
+                      {format(
+                        new Date(event.start?.dateTime || event.start?.date || ''),
+                        'MMM d, h:mm a'
+                      )}
+                    </span>
+                  </div>
+                  {event.attendees && (
+                    <div className="text-[11px] text-[#808080]">
+                      👥 {event.attendees.length} attendees
+                    </div>
+                  )}
+                </div>
+
+                {(event.hangoutLink || event.location) && (
+                  <a
+                    href={event.hangoutLink || event.location || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <button className="w-full h-[34px] bg-[#FF5A0A] hover:bg-[#E94E08] text-white text-xs font-semibold rounded-[10px] transition-all shadow-xs cursor-pointer">
+                      Join Meeting
+                    </button>
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
 
 export default UpcomingMeetings

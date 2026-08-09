@@ -33,9 +33,13 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'invalid signature' }, { status: 401 })
         }
 
-        await app.processEvent({
+        // ✅ Acknowledge Slack immediately (must respond within 3 seconds)
+        // Process the event in the background so the heavy RAG/OpenAI work doesn't block the response
+        app.processEvent({
             body: bodyJson,
             ack: async () => { }
+        }).catch((err) => {
+            console.error('Background processEvent error:', err)
         })
 
         return NextResponse.json({ ok: true })

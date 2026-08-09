@@ -1,161 +1,131 @@
 'use client'
 
-import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { SignInButton, SignUpButton, useUser } from "@clerk/nextjs"
-import { ArrowRight, CheckCircle, ChevronRight, Moon, Play, Sparkles, Sun } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
-import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
-import { fadeUp, staggerContainer, staggerItem } from "@/lib/design-system/animations"
+import Navbar from './Navbar'
+import { SignUpButton, useUser } from '@clerk/nextjs'
+import { motion } from 'framer-motion'
+import { CheckCircle2, ChevronsRight, Play, Sparkles } from 'lucide-react'
+import Link from 'next/link'
 
 export default function HeroSection() {
-    const { isSignedIn } = useUser()
-    const { theme, setTheme } = useTheme()
-    const [mounted, setMounted] = useState(false)
+  const { isSignedIn } = useUser()
 
-    useEffect(() => {
-        setMounted(true)
-    }, [])
+  return (
+    <>
+      <Navbar />
 
-    return (
-        <>
-            <nav className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-                <div className="max-w-6xl mx-auto px-4 py-4">
-                    <div className="flex justify-between items-center">
-                        <Link href="/" className="flex items-center gap-2">
-                            <Image
-                                src="/meetMatee.png"
-                                alt="MeetMatee Logo"
-                                width={200}
-                                height={40}
-                                priority
-                                unoptimized
-                                className="h-9 w-auto object-contain"
-                            />
-                        </Link>
-                        <div className="flex items-center gap-3">
-                            {mounted && (
-                                <Button
-                                    variant="outline"
-                                    size="icon"
-                                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                                    className="border-border text-foreground hover:bg-muted cursor-pointer transition-colors"
-                                    title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
-                                >
-                                    {theme === 'dark' ? (
-                                        <Sun className="w-4 h-4 text-yellow-500" />
-                                    ) : (
-                                        <Moon className="w-4 h-4 text-blue-500" />
-                                    )}
-                                </Button>
-                            )}
+      <section className="pt-[140px] md:pt-[170px] pb-12 md:pb-16 px-5 sm:px-8 max-w-[1280px] mx-auto overflow-hidden">
+        <div className="max-w-[850px] mx-auto text-center flex flex-col items-center">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            className="inline-flex items-center gap-2 bg-[#FFF2EA] border border-[#FF5A0A]/20 px-4 py-2 rounded-full mb-8 shadow-xs"
+          >
+            <Sparkles className="w-4 h-4 text-[#FF5A0A]" />
+            <span className="text-xs sm:text-sm font-semibold text-[#FF5A0A] tracking-tight">
+              AI-Powered Meeting Assistant
+            </span>
+          </motion.div>
 
-                            {isSignedIn ? (
-                                <Button asChild className="bg-[#5B5CEB] hover:bg-[#4F46E5] text-white shadow-md">
-                                    <Link href="/home">Dashboard</Link>
-                                </Button>
-                            ) : (
-                                <>
-                                    <SignInButton mode="modal">
-                                        <Button variant="outline" className="border-border text-foreground hover:bg-muted cursor-pointer">
-                                            Sign In
-                                        </Button>
-                                    </SignInButton>
+          {/* Hero Title */}
+          <motion.h1
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: 'easeOut' }}
+            className="text-[36px] sm:text-[52px] md:text-[68px] font-bold leading-[1.12] tracking-[-0.03em] text-[#111111] mb-6 text-center max-w-[850px]"
+          >
+            Make your meetings
+            <br />
+            more effective
+          </motion.h1>
 
-                                    <SignUpButton mode="modal">
-                                        <Button className="bg-[#5B5CEB] hover:bg-[#4F46E5] text-white shadow-md cursor-pointer">
-                                            Get Started
-                                        </Button>
-                                    </SignUpButton>
-                                </>
-                            )}
-                        </div>
-                    </div>
+          {/* Hero Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
+            className="text-[15px] sm:text-[18px] md:text-[20px] font-normal leading-[1.6] tracking-[-0.01em] text-[#555555] max-w-[580px] text-center mb-8"
+          >
+            Experience crystal-clear video meetings and seamless connectivity—all in one intuitive platform.
+
+
+
+
+          </motion.p>
+
+          {/* Action Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: 'easeOut' }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-10"
+          >
+            {isSignedIn ? (
+              <Link
+                href="/home"
+                className="w-full sm:w-auto inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white font-semibold text-[15px] sm:text-[16px] h-[52px] px-6 rounded-[16px] shadow-sm hover:-translate-y-[3px] transition-all duration-300 group"
+              >
+                <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
+                  <ChevronsRight className="w-4 h-4" />
                 </div>
-            </nav>
+                <span>Dashboard</span>
+              </Link>
+            ) : (
+              <SignUpButton mode="modal">
+                <button className="w-full sm:w-auto inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white font-semibold text-[15px] sm:text-[16px] h-[52px] px-6 rounded-[16px] shadow-sm hover:-translate-y-[3px] transition-all duration-300 group cursor-pointer">
+                  <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
+                    <ChevronsRight className="w-4 h-4" />
+                  </div>
+                  <span>Start Free Trial</span>
+                </button>
+              </SignUpButton>
+            )}
 
-            <section className="py-20 px-4 bg-background text-foreground relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(91,92,235,0.15),rgba(255,255,255,0))]" />
-                <motion.div
-                    variants={staggerContainer}
-                    initial="initial"
-                    animate="animate"
-                    className="max-w-4xl mx-auto text-center relative z-10"
-                >
-                    <motion.div variants={staggerItem} className="group relative mx-auto flex w-fit items-center justify-center rounded-full px-4 py-1.5 shadow-[inset_0_-8px_10px_#5b5ceb1f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#5b5ceb3f] mb-8">
-                        <span
-                            className={cn(
-                                "absolute inset-0 block h-full w-full animate-gradient rounded-[inherit] bg-gradient-to-r from-[#5B5CEB]/50 via-[#4F46E5]/50 to-[#5B5CEB]/50 bg-[length:300%_100%] p-[1px]",
-                            )}
-                            style={{
-                                WebkitMask:
-                                    "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                                WebkitMaskComposite: "destination-out",
-                                mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                                maskComposite: "subtract",
-                                WebkitClipPath: "padding-box",
-                            }}
-                        />
-                        <Sparkles className="w-4 h-4 mr-2 text-[#5B5CEB]" />
-                        <hr className="mx-2 h-4 w-px shrink-0 bg-neutral-500" />
-                        <AnimatedGradientText className="text-sm font-medium text-foreground/80">
-                            AI-Powered Meeting Assistant
-                        </AnimatedGradientText>
-                        <ChevronRight
-                            className="ml-1 w-4 h-4 stroke-neutral-500 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5"
-                        />
-                    </motion.div>
-                    <motion.h1 variants={staggerItem} className="text-4xl md:text-6xl font-bold text-foreground mb-6 tracking-tight">
-                        Transform Your Meetings with{' '}
-                        <span className="bg-gradient-to-r from-[#5B5CEB] via-[#6366F1] to-[#3B82F6] bg-clip-text text-transparent">AI Magic</span>
-                    </motion.h1>
-                    <motion.p variants={staggerItem} className="text-lg max-w-2xl mx-auto mb-8 text-muted-foreground leading-relaxed">
-                        Automatic summaries, action items, and intelligent insights for every meeting.
-                        Never miss important details again.
-                    </motion.p>
-                    <motion.div variants={staggerItem} className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                        {isSignedIn ? (
-                            <Button asChild size="lg" className="bg-[#5B5CEB] hover:bg-[#4F46E5] text-white shadow-md hover:shadow-lg hover:shadow-[#5B5CEB]/25 px-8 py-4" >
-                                <Link href="/home" className="group">
-                                    <span>Dashboard</span>
-                                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+            <button className="w-full sm:w-auto inline-flex items-center justify-center bg-white hover:bg-[#fafafa] text-[#0D0D0D] font-semibold text-[15px] sm:text-[16px] h-[52px] px-6 rounded-[16px] border border-black/[0.12] shadow-xs hover:-translate-y-[3px] transition-all duration-300 group cursor-pointer">
+              <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
+                <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+              </div>
+              <span>Watch Demo</span>
+            </button>
+          </motion.div>
 
-                                </Link>
-                            </Button>
-                        ) : (
-                            <SignUpButton mode="modal">
-                                <Button size="lg" className="bg-[#5B5CEB] hover:bg-[#4F46E5] text-white shadow-md hover:shadow-lg hover:shadow-[#5B5CEB]/25 px-8 py-4 group cursor-pointer">
-                                    <span>Start Free Trial</span>
-                                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                                </Button>
-                            </SignUpButton>
-                        )}
+          {/* Trust Indicators */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4, ease: 'easeOut' }}
+            className="flex flex-wrap items-center justify-center gap-5 sm:gap-8 text-xs sm:text-sm font-medium text-[#555555] mb-10 sm:mb-14"
+          >
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#FF5A0A]" />
+              <span>No credit card required</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#FF5A0A]" />
+              <span>Setup in 2 minutes</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#FF5A0A]" />
+              <span>Free forever plan</span>
+            </div>
+          </motion.div>
 
-                        <Button variant="outline" size="lg" className="border-border text-foreground hover:bg-muted px-8 py-4 cursor-pointer">
-                            <Play className="w-5 h-5 mr-2" />
-                            <span>Watch Demo</span>
-                        </Button>
-                    </motion.div>
-                    <motion.div variants={staggerItem} className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-muted-foreground">
-                        <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-emerald-500" />
-                            <span>No credit card required</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-emerald-500" />
-                            <span>Setup in 2 minutes</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-emerald-500" />
-                            <span>Free forever plan</span>
-                        </div>
-                    </motion.div>
-                </motion.div>
-            </section>
-        </>
-    )
+          {/* Hero Section Image Showcase (/hero image.png) */}
+          <motion.div
+            initial={{ opacity: 0, y: 35 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: 'easeOut' }}
+            className="w-full max-w-[1150px] mx-auto"
+          >
+            <img
+              src="/hero image.png"
+              alt="MeetMatee Platform Preview"
+              className="w-full h-auto rounded-[20px] sm:rounded-[28px] md:rounded-[36px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-black/[0.06] object-contain transition-transform duration-700 hover:scale-[1.005]"
+            />
+          </motion.div>
+        </div>
+      </section>
+    </>
+  )
 }

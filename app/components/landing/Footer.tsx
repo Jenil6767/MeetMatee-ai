@@ -1,39 +1,90 @@
 'use client'
 
-import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 
-function Footer() {
-    return (
-        <footer className='border-t border-border py-6 bg-background text-foreground'>
-            <div className='max-w-6xl mx-auto px-4'>
-                <motion.div
-                    initial={{ opacity: 0, y: 12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4 }}
-                    className='flex flex-col md:flex-row justify-between items-center'
-                >
-                    <Link href="/" className="flex items-center gap-2 mb-4 md:mb-0 group">
-                        <Image
-                            src="/meetMatee.png"
-                            alt="MeetMatee Logo"
-                            width={200}
-                            height={40}
-                            priority
-                            unoptimized
-                            className="h-9 w-auto object-contain transition-transform group-hover:scale-105"
-                        />
-                    </Link>
-                    <div className='text-muted-foreground text-sm font-medium'>
-                        &copy; {new Date().getFullYear()} MeetMatee. Made with ❤️ for better meetings.
-                    </div>
-                </motion.div>
-            </div>
-        </footer>
-    )
+export default function Footer() {
+  return (
+    <footer className="w-full bg-white border-t border-black/[0.08] relative z-20 py-8 md:py-10 shadow-xs">
+      <div className="max-w-[1280px] mx-auto px-5 sm:px-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pb-6 border-b border-black/[0.08]">
+          {/* Left Column: Logo & Subtext - full width on mobile */}
+          <div className="col-span-2 md:col-span-2 space-y-3">
+            <Link href="/" className="inline-block">
+              <Image
+                src="/meetMatee.png"
+                alt="MeetMatee Logo"
+                width={160}
+                height={32}
+                priority
+                unoptimized
+                className="h-[30px] w-auto object-contain opacity-100"
+              />
+            </Link>
+            <p className="text-xs sm:text-sm text-[#444444] font-normal tracking-[-0.01em] leading-[1.6] max-w-sm">
+              An AI-powered meeting assistant for modern teams. Automatic summaries, action items, and intelligent insights for every meeting.
+            </p>
+          </div>
+
+          {/* Center Column: Product */}
+          <div>
+            <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-[-0.02em] mb-3">
+              Product
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm font-medium">
+              <li>
+                <a href="/#features" className="text-[#333333] hover:text-[#FF5A0A] transition-colors">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="/#integrations" className="text-[#333333] hover:text-[#FF5A0A] transition-colors">
+                  Integrations
+                </a>
+              </li>
+              <li>
+                <a href="/#how-it-works" className="text-[#333333] hover:text-[#FF5A0A] transition-colors">
+                  How it works
+                </a>
+              </li>
+              <li>
+                <a href="/pricing" className="text-[#333333] hover:text-[#FF5A0A] transition-colors">
+                  Pricing
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Right Column: Legal */}
+          <div>
+            <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-[-0.02em] mb-3">
+              Legal
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm font-medium">
+              <li>
+                <Link href="/privacy-policy" className="text-[#333333] hover:text-[#FF5A0A] transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-[#333333] hover:text-[#FF5A0A] transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/cookie" className="text-[#333333] hover:text-[#FF5A0A] transition-colors">
+                  Cookie Policy
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Footer Copyright */}
+        <div className="pt-5 text-center text-xs text-[#555555] font-normal tracking-[-0.01em]">
+          &copy; 2026 MeetMatee. Transform conversations into actionable insights.
+        </div>
+      </div>
+    </footer>
+  )
 }
-
-export default Footer

@@ -1,40 +1,42 @@
 import React from 'react'
+
 interface AttendeeAvatarsProps {
   attendees: any
   getAttendeeList: (attendees: any) => string[]
   getInitials: (name: string) => string
 }
 
-
-
-function AttendeeAvatars({ attendees, getAttendeeList, getInitials }: AttendeeAvatarsProps) {
+function AttendeeAvatars({
+  attendees,
+  getAttendeeList,
+  getInitials,
+}: AttendeeAvatarsProps) {
   const attendeeList = getAttendeeList(attendees)
+
   return (
-    <div className='flex -space-x-2'>
+    <div className="flex -space-x-1.5 items-center">
       {attendeeList.slice(0, 4).map((attendee, index) => (
-        <div
-          key={index}
-          className='relative group'
-          title={attendee}
-        >
-          <div className='w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 border-2 border-background flex items-center justify-center text-white text-xs font-medium hover:scale-110 transition-transform cursor-pointer'>
+        <div key={index} className="relative group/avatar">
+          {/* Default view: Short Initials only */}
+          <div className="w-7 h-7 rounded-full bg-[#0F0F10] text-white border-2 border-white flex items-center justify-center text-[11px] font-bold hover:scale-110 transition-transform cursor-pointer shadow-xs">
             {getInitials(attendee)}
           </div>
-          <div className='absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10'>
+
+          {/* Hover Tooltip: Displays ONLY when THIS specific avatar is hovered */}
+          <div className="absolute left-0 bottom-full mb-2 bg-[#0F0F10] text-white text-xs font-semibold px-3 py-1.5 rounded-[10px] shadow-xl opacity-0 group-hover/avatar:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap z-50 border border-white/10">
             {attendee}
           </div>
         </div>
       ))}
+
       {attendeeList.length > 4 && (
         <div
-          className='w-6 h-6 rounded-full bg-gray-500 border-2 border-background flex items-center justify-center text-white text-xs font-medium'
+          className="w-7 h-7 rounded-full bg-[#FF5A0A] text-white border-2 border-white flex items-center justify-center text-[11px] font-bold shadow-xs"
           title={`+${attendeeList.length - 4} more`}
-
         >
           +{attendeeList.length - 4}
         </div>
       )}
-
     </div>
   )
 }

@@ -1,0 +1,248 @@
+{
+  "privacy-policy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "15th June 2026",
+    "intro": "MeetMatee (\"we\", \"us\", \"our\") collects and uses personal information to operate the platform, generate AI meeting services, enhance user experience, and fulfil service requests. We comply with applicable privacy laws, including the Australian Privacy Principles and GDPR where relevant.",
+    "sections": [
+      {
+        "title": "Data We Collect",
+        "items": [
+          "Identity & Contact Information: Name, email address, organisation (when provided).",
+          "Content Inputs: Configuration parameters, prompt inputs, business profile info, email addresses, and other content required to configure meeting profiles.",
+          "Usage Data: IP address, device/browser details, session logs, call transcript files, activity data, and interaction history within the product.",
+          "Cookies & Tracking Technologies: Used for analytics, authentication, and improving performance. See our Cookie Policy for details."
+        ]
+      },
+      {
+        "title": "Purpose of Processing",
+        "description": "We use personal data to:",
+        "items": [
+          "Provide, operate, and improve the MeetMatee meeting-generation and assistant service",
+          "Authenticate and manage user accounts",
+          "Process meeting configuration and version requests",
+          "Respond to support enquiries",
+          "Personalise content, recommendations, and communication",
+          "Monitor security, detect fraud, and prevent misuse",
+          "Analyse usage to enhance product performance"
+        ]
+      },
+      {
+        "title": "Legal Basis (GDPR – where applicable)",
+        "description": "For users in the EU/UK/EEA, our processing is based on:",
+        "items": [
+          "Consent: analytics, marketing, optional cookies",
+          "Performance of a Contract: providing voice agent configurations and account services",
+          "Legitimate Interests: service improvement, security, troubleshooting—balanced with user rights"
+        ]
+      },
+      {
+        "title": "Sharing & Disclosure",
+        "paragraphs": [
+          "We do not sell personal data.",
+          "We may share data with:"
+        ],
+        "items": [
+          "Service Providers: telephony servers, database hosting, cloud hosting, analytics, billing integrations (Stripe), email dispatchers — strictly under contractual obligations",
+          "Legal Authorities: where required by law",
+          "Business Transfers: if MeetMatee undergoes a merger, acquisition, or similar event (with prior notice where required)"
+        ]
+      },
+      {
+        "title": "Data Retention",
+        "description": "We retain personal data only as long as necessary to:",
+        "items": [
+          "Provide services",
+          "Meet legal obligations",
+          "Resolve disputes",
+          "Maintain secure backups"
+        ],
+        "footerNote": "Users may request deletion at any time."
+      },
+      {
+        "title": "Your Rights",
+        "description": "Depending on your jurisdiction, you may:",
+        "items": [
+          "Access, correct, or delete your information",
+          "Restrict or object to certain processing",
+          "Withdraw consent for optional processing (e.g., marketing)",
+          "Request a portable copy of your data",
+          "Lodge a complaint with a data protection authority (for GDPR regions)"
+        ]
+      },
+      {
+        "title": "International Transfers",
+        "paragraphs": [
+          "Your data may be stored or processed in countries outside your own.",
+          "Where GDPR applies, we use appropriate safeguards such as:"
+        ],
+        "items": [
+          "Standard Contractual Clauses (SCCs)",
+          "Equivalent protective measures"
+        ]
+      },
+      {
+        "contactBox": {
+          "title": "Contact Us",
+          "description": "For requests, concerns, or data-related questions, please email us at:",
+          "email": "meetmateesaas@gmail.com"
+        }
+      },
+      {
+        "title": "Changes to This Policy",
+        "paragraphs": [
+          "We may update this Privacy Policy occasionally. Material changes will be posted here with an updated date."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "15th June 2026",
+    "sections": [
+      {
+        "title": "Acceptance",
+        "paragraphs": [
+          "Using MeetMatee (\"the Service\") constitutes your agreement to these Terms of Service.",
+          "If you do not agree, please do not use the platform."
+        ]
+      },
+      {
+        "title": "Service Description",
+        "paragraphs": [
+          "MeetMatee provides an AI-powered platform that creates custom meeting assistants based on the parameters, configuration scripts, and templates you provide.",
+          "Features, availability, pricing, and functionality may change at any time."
+        ]
+      },
+      {
+        "title": "Accounts & Responsibilities",
+        "description": "You are responsible for:",
+        "items": [
+          "Maintaining the confidentiality of your login credentials",
+          "All actions taken under your account",
+          "Providing accurate, up-to-date information"
+        ],
+        "footerNote": "We may suspend accounts that contain misleading information or violate these Terms."
+      },
+      {
+        "title": "User Content & Licenses",
+        "paragraphs": [
+          "You retain full ownership of the content and scripts you upload or generate through the Service.",
+          "By using MeetMatee, you grant us a worldwide, non-exclusive, royalty-free license to use, host, process, reproduce, and display content solely for the purpose of operating, improving, and providing the Service.",
+          "You confirm that:"
+        ],
+        "items": [
+          "You have the rights to upload any configuration content you provide",
+          "Your content does not violate intellectual property rights, privacy rights, or any applicable laws"
+        ]
+      },
+      {
+        "title": "Acceptable Use Guidelines",
+        "description": "You agree not to upload or generate content that is:",
+        "items": [
+          "Illegal or infringing",
+          "Defamatory, hateful, abusive, or harassing",
+          "Pornographic or sexually explicit",
+          "Violent, harmful, or malicious",
+          "Misleading, fraudulent, or used for impersonation",
+          "Designed to exploit, harm, or deceive others"
+        ],
+        "footerNote": "We may remove content and suspend or terminate accounts for violations of these rules."
+      },
+      {
+        "title": "Fees & Payment Terms",
+        "items": [
+          "Fees are listed at the time of purchase",
+          "Subscriptions renew automatically unless cancelled",
+          "You may cancel your subscription at any time",
+          "Refunds follow our published billing guidelines"
+        ],
+        "footerNote": "We may change pricing with reasonable notice."
+      },
+      {
+        "calloutBox": {
+          "title": "Disclaimer",
+          "description": "MeetMatee is provided \"as is\" and \"as available.\" We do not guarantee uninterrupted service, accuracy of results, or suitability for any specific purpose. No warranties are provided beyond those required by law."
+        }
+      },
+      {
+        "title": "Limitation of Liability",
+        "items": [
+          "We are not liable for indirect, incidental, special, or consequential damages",
+          "We are not responsible for loss of revenue, profits, data, reputation, or business opportunities",
+          "Our total liability is limited to the amount paid by you in the last 3 months (if any)"
+        ]
+      },
+      {
+        "title": "Termination & Cancellation",
+        "paragraphs": [
+          "We may suspend or terminate your access if you violate these Terms, your account is inactive for an extended period, or required by law.",
+          "You may cancel your account via your dashboard or billing portal."
+        ]
+      },
+      {
+        "contactBox": {
+          "title": "Support & Inquiries",
+          "description": "For questions regarding these Terms, please contact us at:",
+          "email": "meetmateesaas@gmail.com"
+        }
+      }
+    ]
+  },
+  "cookie": {
+    "title": "Cookie Policy",
+    "lastUpdated": "15th June 2026",
+    "sections": [
+      {
+        "title": "What Are Cookies",
+        "paragraphs": [
+          "Cookies are small data files stored on your device to recognise you, remember preferences, and enhance your experience on MeetMatee."
+        ]
+      },
+      {
+        "title": "Types of Cookies We Use",
+        "gridCards": [
+          {
+            "title": "Essential Cookies",
+            "description": "Required for the platform to function (login, authentication, session stability)."
+          },
+          {
+            "title": "Performance & Analytics Cookies",
+            "description": "Help us understand how users interact with MeetMatee, identify errors, and improve speed and performance."
+          },
+          {
+            "title": "Functional Cookies",
+            "description": "Remember your preferences (language, settings, saved choices) to provide a smoother experience."
+          },
+          {
+            "title": "Marketing Cookies",
+            "description": "Optional third-party cookies used to personalise communication, track conversions, and show relevant content."
+          }
+        ]
+      },
+      {
+        "title": "Consent",
+        "paragraphs": [
+          "On your first visit, we request your consent for any non-essential cookies. You can adjust or withdraw your cookie preferences at any time through the cookie settings panel."
+        ]
+      },
+      {
+        "title": "Third-Party Cookies",
+        "paragraphs": [
+          "Some cookies may be placed by trusted third-party providers for analytics, embedded services, or marketing. Their usage is governed by their respective privacy and cookie policies."
+        ]
+      },
+      {
+        "calloutBox": {
+          "title": "💡 Managing Cookies",
+          "description": "You may disable or delete cookies through your browser settings. Please note: disabling essential cookies may limit certain features or prevent parts of MeetMatee from working properly."
+        }
+      },
+      {
+        "title": "Updates to This Policy",
+        "paragraphs": [
+          "We may update this Cookie Policy to reflect changes in cookie usage or legal requirements. The latest revision date will always be shown at the top of this page."
+        ]
+      }
+    ]
+  }
+}
