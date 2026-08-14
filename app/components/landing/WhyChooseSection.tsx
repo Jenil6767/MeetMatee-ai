@@ -155,11 +155,10 @@ function ChatMockup() {
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
-              className={`max-w-[80%] rounded-[12px] px-3 py-2 text-[10px] leading-relaxed ${
-                msg.role === 'user'
+              className={`max-w-[80%] rounded-[12px] px-3 py-2 text-[10px] leading-relaxed ${msg.role === 'user'
                   ? 'bg-[#FF5A0A] text-white rounded-br-[4px]'
                   : 'bg-white/[0.08] text-[#CCCCCC] rounded-bl-[4px]'
-              }`}
+                }`}
             >
               {msg.text}
             </div>
@@ -187,7 +186,7 @@ const cards = [
     label: 'AI Intelligence & Summaries',
     title: 'Instant Automated Meeting Notes & Action Extraction',
     description:
-      'Every spoken word is transcribed in real-time, summarized into key takeaways, and structured into assigned action items — delivered instantly when your call finishes. Eliminate manual note-taking entirely for your team.',
+      'Every spoken word is transcribed in real-time, summarized into key takeaways, and structured into assigned action items  delivered instantly when your call finishes. Eliminate manual note-taking entirely for your team.',
     Mockup: SummaryMockup,
     accent: '#FF5A0A',
   },

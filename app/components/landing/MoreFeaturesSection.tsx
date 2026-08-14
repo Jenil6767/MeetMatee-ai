@@ -16,7 +16,7 @@ const moreFeatures = [
     icon: HeadphonesIcon,
     title: 'Built-in Audio Playback',
     description:
-      'Replay any recorded meeting directly in the app with our custom audio player — seek, pause, and review sessions anytime.',
+      'Replay any recorded meeting directly in the app with our custom audio player  seek, pause, and review sessions anytime.',
     tag: 'Meeting Details',
   },
   {
@@ -30,7 +30,7 @@ const moreFeatures = [
     icon: MessageSquareText,
     title: 'Chat with Your Meetings',
     description:
-      'Ask questions like "What were the key decisions?" and get intelligent answers powered by our RAG AI pipeline — across all past meetings.',
+      'Ask questions like "What were the key decisions?" and get intelligent answers powered by our RAG AI pipeline  across all past meetings.',
     tag: 'RAG-Powered',
   },
   {
@@ -51,7 +51,7 @@ const moreFeatures = [
     icon: ExternalLink,
     title: '1-Click Action Item Push',
     description:
-      'Send any AI-extracted action item directly to Jira, Asana, Trello, or Slack with one click — right from inside the meeting details page.',
+      'Send any AI-extracted action item directly to Jira, Asana, Trello, or Slack with one click  right from inside the meeting details page.',
     tag: 'Integrations',
   },
 ]

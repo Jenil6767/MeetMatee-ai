@@ -10,7 +10,7 @@ const integrations = [
     name: 'Google Calendar',
     image: 'gcal.png',
     role: 'Auto-Join Meetings',
-    syncType: 'Auto-Detect',
+    syncType: 'Auto-Join',
     color: '#4285F4',
   },
   {

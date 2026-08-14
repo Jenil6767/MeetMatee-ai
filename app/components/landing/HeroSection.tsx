@@ -47,7 +47,7 @@ export default function HeroSection() {
             transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
             className="text-[15px] sm:text-[18px] md:text-[20px] font-normal leading-[1.6] tracking-[-0.01em] text-[#555555] max-w-[580px] text-center mb-8"
           >
-            Experience crystal-clear video meetings and seamless connectivity—all in one intuitive platform.
+            Experience crystal-clear video meetings and seamless connectivity all in one intuitive platform.
 
 
 
@@ -69,7 +69,7 @@ export default function HeroSection() {
                 <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
                   <ChevronsRight className="w-4 h-4" />
                 </div>
-                <span>Dashboard</span>
+                <span>Start Free Trial</span>
               </Link>
             ) : (
               <SignUpButton mode="modal">

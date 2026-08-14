@@ -67,7 +67,7 @@ export default function CTASection() {
             <Star className="w-4 h-4 fill-current" />
           </div>
           <span className="ml-1 text-[15px] font-semibold text-[#0D0D0D]">
-            4.9/5 from 2+ reviews
+            4.9/5
           </span>
         </div>
       </motion.div>

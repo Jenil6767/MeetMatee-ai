@@ -8,7 +8,7 @@ const faqs = [
   {
     question: 'How does MeetMatee automatically join my meetings?',
     answer:
-      'Once you connect your Google Calendar, MeetMatee detects all your upcoming meetings automatically. Before each scheduled meeting, our AI bot is dispatched to join the call, record audio, and generate a full transcript — without any manual action needed from you.',
+      'Once you connect your Google Calendar, MeetMatee detects all your upcoming meetings automatically. Before each scheduled meeting, our AI bot is dispatched to join the call, record audio, and generate a full transcript  without any manual action needed from you.',
   },
   {
     question: 'What does the AI do after each meeting?',
@@ -84,11 +84,10 @@ export default function FAQSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.06, ease: 'easeOut' }}
-              className={`rounded-[20px] border transition-all duration-300 overflow-hidden ${
-                isOpen
+              className={`rounded-[20px] border transition-all duration-300 overflow-hidden ${isOpen
                   ? 'border-[#FF5A0A]/30 bg-white shadow-[0_10px_35px_rgba(255,90,10,0.08)]'
                   : 'border-black/[0.08] bg-white/80 hover:bg-white hover:shadow-[0_8px_25px_rgba(0,0,0,0.05)]'
-              }`}
+                }`}
             >
               {/* Question Row */}
               <button
@@ -97,18 +96,16 @@ export default function FAQSection() {
                 aria-expanded={isOpen}
               >
                 <span
-                  className={`text-[15px] sm:text-[16px] font-semibold tracking-[-0.02em] leading-snug transition-colors ${
-                    isOpen ? 'text-[#FF5A0A]' : 'text-[#111111] group-hover:text-[#FF5A0A]'
-                  }`}
+                  className={`text-[15px] sm:text-[16px] font-semibold tracking-[-0.02em] leading-snug transition-colors ${isOpen ? 'text-[#FF5A0A]' : 'text-[#111111] group-hover:text-[#FF5A0A]'
+                    }`}
                 >
                   {faq.question}
                 </span>
                 <div
-                  className={`w-8 h-8 rounded-full shrink-0 flex items-center justify-center transition-all duration-300 ${
-                    isOpen
+                  className={`w-8 h-8 rounded-full shrink-0 flex items-center justify-center transition-all duration-300 ${isOpen
                       ? 'bg-[#FF5A0A] text-white rotate-180'
                       : 'bg-[#F4EFE5] text-[#555555]'
-                  }`}
+                    }`}
                 >
                   <ChevronDown className="w-4 h-4 stroke-[2.5]" />
                 </div>

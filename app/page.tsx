@@ -27,7 +27,7 @@ export default function Home() {
         <WhyChooseSection />
         <IntegrationsSection />
         <HowItWorksSection />
-        <StatsSection />
+        {/* <StatsSection /> */}
         <MoreFeaturesSection />
         <Pricing />
         <FAQSection />

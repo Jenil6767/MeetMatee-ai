@@ -28,11 +28,6 @@ const items = [
     icon: Layers3,
   },
   {
-    title: 'Settings',
-    url: '/settings',
-    icon: Settings,
-  },
-  {
     title: 'Chat with AI',
     url: '/chat',
     icon: Bot,
@@ -41,6 +36,11 @@ const items = [
     title: 'Pricing',
     url: '/pricing',
     icon: DollarSign,
+  },
+  {
+    title: 'Settings',
+    url: '/settings',
+    icon: Settings,
   },
 ]
 
