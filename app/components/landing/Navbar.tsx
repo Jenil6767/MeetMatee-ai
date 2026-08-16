@@ -67,22 +67,15 @@ export default function Navbar() {
               <span>Dashboard</span>
             </Link>
           ) : (
-            <div className="flex items-center gap-3">
-              <SignInButton mode="modal">
-                <button className="text-[15px] font-medium text-[#222222] hover:text-[#FF5A0A] px-3 py-2 transition-colors cursor-pointer">
-                  Sign In
-                </button>
-              </SignInButton>
-
-              <SignUpButton mode="modal">
-                <button className="inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white text-[15px] font-semibold h-[48px] px-4 rounded-[14px] transition-all duration-300 hover:-translate-y-[2px] shadow-sm group cursor-pointer">
-                  <div className="w-6 h-6 rounded-md bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
-                    <ChevronsRight className="w-3.5 h-3.5" />
-                  </div>
-                  <span>Get Started</span>
-                </button>
-              </SignUpButton>
-            </div>
+            <Link
+              href="/sign-in"
+              className="inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white text-[15px] font-semibold h-[48px] px-4 rounded-[14px] transition-all duration-300 hover:-translate-y-[2px] shadow-sm group cursor-pointer"
+            >
+              <div className="w-6 h-6 rounded-md bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
+                <ChevronsRight className="w-3.5 h-3.5" />
+              </div>
+              <span>Start Free Trial</span>
+            </Link>
           )}
         </div>
 
@@ -140,20 +133,17 @@ export default function Navbar() {
                 <span>Dashboard</span>
               </Link>
             ) : (
-              <div className="flex flex-col gap-3 pt-2">
-                <SignInButton mode="modal">
-                  <button className="w-full text-[16px] font-medium text-[#222222] py-3 hover:text-[#FF5A0A]">
-                    Sign In
-                  </button>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                  <button className="w-full inline-flex items-center justify-center bg-[#0F0F10] text-white text-[16px] font-semibold h-[52px] px-6 rounded-[16px]">
-                    <div className="w-7 h-7 rounded-md bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0">
-                      <ChevronsRight className="w-4 h-4" />
-                    </div>
-                    <span>Get Started</span>
-                  </button>
-                </SignUpButton>
+              <div className="pt-2">
+                <Link
+                  href="/sign-in"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full inline-flex items-center justify-center bg-[#0F0F10] text-white text-[16px] font-semibold h-[52px] px-6 rounded-[16px]"
+                >
+                  <div className="w-7 h-7 rounded-md bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0">
+                    <ChevronsRight className="w-4 h-4" />
+                  </div>
+                  <span>Start Free Trial</span>
+                </Link>
               </div>
             )}
           </motion.div>

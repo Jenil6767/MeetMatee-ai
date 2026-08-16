@@ -46,14 +46,15 @@ export default function CTASection() {
               <span>Dashboard</span>
             </Link>
           ) : (
-            <SignUpButton mode="modal">
-              <button className="inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white font-semibold text-[16px] h-[52px] px-8 rounded-[16px] shadow-sm hover:-translate-y-[3px] transition-all duration-300 group cursor-pointer">
-                <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
-                  <ChevronsRight className="w-4 h-4" />
-                </div>
-                <span>Start Your Free Trail</span>
-              </button>
-            </SignUpButton>
+            <Link
+              href="/sign-in"
+              className="inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white font-semibold text-[16px] h-[52px] px-8 rounded-[16px] shadow-sm hover:-translate-y-[3px] transition-all duration-300 group cursor-pointer"
+            >
+              <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
+                <ChevronsRight className="w-4 h-4" />
+              </div>
+              <span>Start Free Trial</span>
+            </Link>
           )}
         </div>
 
