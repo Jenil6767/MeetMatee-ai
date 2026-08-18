@@ -123,10 +123,44 @@ export function UsageProvider({ children }: { children: ReactNode }) {
     }
 
     useEffect(() => {
-        if (isLoaded && userId) {
-            fetchUsage()
-        } else if (isLoaded && !userId) {
-            setLoading(false)
+        let interval: NodeJS.Timeout
+
+        const checkUsage = async () => {
+            if (isLoaded && userId) {
+                await fetchUsage()
+
+                if (typeof window !== 'undefined') {
+                    const searchParams = new URLSearchParams(window.location.search)
+                    if (searchParams.get('success') === 'true') {
+                        let attempts = 0
+                        interval = setInterval(async () => {
+                            attempts++
+                            try {
+                                const res = await fetch('/api/user/usage')
+                                if (res.ok) {
+                                    const data = await res.json()
+                                    setUsage(data)
+                                    
+                                    if (data.currentPlan !== 'free' || attempts >= 5) {
+                                        clearInterval(interval)
+                                        window.history.replaceState({}, document.title, window.location.pathname)
+                                    }
+                                }
+                            } catch (e) {
+                                console.error('Error polling usage:', e)
+                            }
+                        }, 3000)
+                    }
+                }
+            } else if (isLoaded && !userId) {
+                setLoading(false)
+            }
+        }
+
+        checkUsage()
+
+        return () => {
+            if (interval) clearInterval(interval)
         }
     }, [userId, isLoaded])
 

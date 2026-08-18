@@ -4,13 +4,17 @@ import { SignOutButton, useAuth, useUser } from '@clerk/nextjs'
 import { Bot, Check, LogOut, Save, Upload, User } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useUsage } from '@/app/contexts/UsageContext'
 
 function Settings() {
   const { user } = useUser()
+  const { usage } = useUsage()
   const { userId } = useAuth()
   const [botName, setBotName] = useState('Meeting Bot')
   const [botImageUrl, setBotImageUrl] = useState<string | null>(null)
-  const [userPlan, setUserPlan] = useState('free')
+  
+  const userPlan = usage?.currentPlan || 'free'
+
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -30,7 +34,6 @@ function Settings() {
         const data = await response.json()
         setBotName(data.botName || 'Meeting Bot')
         setBotImageUrl(data.botImageUrl || null)
-        setUserPlan(data.plan || 'free')
       }
     } catch (error) {
       console.error('error fetching bot settings:', error)
