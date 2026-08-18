@@ -112,7 +112,7 @@ export default function Pricing() {
       </motion.div>
 
       {/* Cards */}
-      <div className="grid md:grid-cols-3 gap-8 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch max-w-xl mx-auto lg:max-w-none">
         {plans.map((plan, index) => {
           const isLoading = loading === plan.priceId
 
@@ -123,7 +123,7 @@ export default function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
-              className={`relative bg-white rounded-[24px] p-8 md:p-9 shadow-[0_12px_40px_rgba(0,0,0,0.06)] flex flex-col justify-between transition-all duration-300 hover:-translate-y-[8px] ${
+              className={`relative bg-white rounded-[24px] p-7 lg:p-9 shadow-[0_12px_40px_rgba(0,0,0,0.06)] flex flex-col justify-between transition-all duration-300 hover:-translate-y-[8px] ${
                 plan.popular
                   ? 'border-2 border-[#FF5A0A] shadow-[0_16px_50px_rgba(255,90,10,0.12)]'
                   : 'border border-black/[0.08]'

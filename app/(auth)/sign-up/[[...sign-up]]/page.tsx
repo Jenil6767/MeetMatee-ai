@@ -81,7 +81,7 @@ export default function Page() {
       />
 
       {/* Security + Terms below card */}
-      <div className="mt-3.5 flex flex-col items-center gap-1">
+      {/* <div className="mt-3.5 flex flex-col items-center gap-1">
         <div className="flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-[#bbb]" aria-hidden="true" />
           <span className="text-[11px] text-[#aaa] font-normal">
@@ -98,7 +98,7 @@ export default function Page() {
             Privacy Policy
           </Link>
         </p>
-      </div>
+      </div> */}
     </div>
   )
 }

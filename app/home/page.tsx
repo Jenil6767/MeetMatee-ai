@@ -18,8 +18,12 @@ function Home() {
     error,
     botToggles,
     initialLoading,
+    currentPage,
+    totalPages,
+    totalMeetings,
     fetchUpcomingEvents,
     fetchPastMeetings,
+    goToPage,
     toggleBot,
     directOAuth,
     getAttendeeList,
@@ -67,6 +71,10 @@ function Home() {
             onMeetingClick={handleMeetingClick}
             getAttendeeList={getAttendeeList}
             getInitials={getInitials}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalMeetings={totalMeetings}
+            onPageChange={goToPage}
           />
         </div>
 

@@ -40,11 +40,16 @@ export function useMeetings() {
     const [botToggles, setBotToggles] = useState<{ [key: string]: boolean }>({})
     const [initialLoading, setInitialLoading] = useState(true)
 
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
+    const [totalMeetings, setTotalMeetings] = useState(0)
+    const PAGE_LIMIT = 5
 
     useEffect(() => {
         if (userId) {
             fetchUpcomingEvents()
-            fetchPastMeetings()
+            fetchPastMeetings(1)
         }
     }, [userId])
 
@@ -95,11 +100,10 @@ export function useMeetings() {
 
     }
 
-    const fetchPastMeetings = async () => {
-
+    const fetchPastMeetings = async (page: number = 1) => {
         setPastLoading(true)
         try {
-            const response = await fetch('/api/meetings/past')
+            const response = await fetch(`/api/meetings/past?page=${page}&limit=${PAGE_LIMIT}`)
             const result = await response.json()
 
             if (!response.ok) {
@@ -111,10 +115,18 @@ export function useMeetings() {
                 return
             }
             setPastMeetings(result.meetings as PastMeeting[])
+            setCurrentPage(result.page ?? page)
+            setTotalPages(result.totalPages ?? 1)
+            setTotalMeetings(result.total ?? 0)
         } catch (error) {
             console.error('faild to fetch past meetings:', error)
         }
         setPastLoading(false)
+    }
+
+    const goToPage = (page: number) => {
+        if (page < 1 || page > totalPages) return
+        fetchPastMeetings(page)
     }
 
     const toggleBot = async (eventId: string) => {
@@ -197,8 +209,12 @@ export function useMeetings() {
         error,
         botToggles,
         initialLoading,
+        currentPage,
+        totalPages,
+        totalMeetings,
         fetchUpcomingEvents,
         fetchPastMeetings,
+        goToPage,
         toggleBot,
         directOAuth,
         getAttendeeList,

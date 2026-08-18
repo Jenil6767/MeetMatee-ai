@@ -6,8 +6,12 @@ import IntegrationCard from './components/IntegrationCard'
 import SetupForm from './components/SetupForm'
 import { motion } from 'framer-motion'
 import { Info } from 'lucide-react'
+import { useUsage } from '../contexts/UsageContext'
 
 function Integrations() {
+  const { usage } = useUsage()
+  const isFreePlan = !usage || usage.currentPlan === 'free' || usage.subscriptionStatus !== 'active'
+
   const {
     integrations,
     setupMode,
@@ -88,6 +92,7 @@ function Integrations() {
               integration={integration}
               onConnect={handleConnect}
               onDisconnect={handleDisconnect}
+              isFreePlan={isFreePlan}
               onSetup={(platform) => {
                 setSetupMode(platform)
                 fetchSetupData(platform)

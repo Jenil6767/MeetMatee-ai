@@ -10,6 +10,7 @@ interface IntegrationCardProps {
   onConnect: (platform: string) => void
   onDisconnect: (platform: string) => void
   onSetup: (platform: string) => void
+  isFreePlan: boolean
 }
 
 function IntegrationCard({
@@ -17,6 +18,7 @@ function IntegrationCard({
   onConnect,
   onDisconnect,
   onSetup,
+  isFreePlan,
 }: IntegrationCardProps) {
   return (
     <div className="bg-white rounded-[24px] border border-black/[0.08] p-6 shadow-[0_12px_40px_rgba(0,0,0,0.06)] hover:-translate-y-[6px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col justify-between group">
@@ -111,14 +113,35 @@ function IntegrationCard({
             </>
           )
         ) : (
-          <button
-            onClick={() => onConnect(integration.platform)}
-            type="button"
-            className="w-full h-[42px] bg-[#0F0F10] hover:bg-black text-white text-xs font-semibold rounded-[12px] flex items-center justify-center gap-2 transition-all hover:scale-[1.01] shadow-xs cursor-pointer"
-          >
-            <span>Connect</span>
-            <ExternalLink className="h-3.5 w-3.5" />
-          </button>
+          /* Free plan: disabled button with tooltip */
+          isFreePlan ? (
+            <div className="relative w-full group/tooltip">
+              <button
+                type="button"
+                disabled
+                className="w-full h-[42px] bg-[#F4EFE5] text-[#AAAAAA] text-xs font-semibold rounded-[12px] flex items-center justify-center gap-2 cursor-not-allowed border border-black/[0.06] select-none"
+              >
+                <span>Connect</span>
+                <ExternalLink className="h-3.5 w-3.5" />
+              </button>
+              {/* Tooltip */}
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 hidden group-hover/tooltip:flex items-center whitespace-nowrap bg-[#0F0F10] text-white text-[11px] font-medium px-3 py-1.5 rounded-[10px] shadow-lg z-20 pointer-events-none gap-1.5">
+                <span>🔒</span>
+                <span>Upgrade your plan to access this integration</span>
+                {/* Arrow */}
+                <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#0F0F10]" />
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => onConnect(integration.platform)}
+              type="button"
+              className="w-full h-[42px] bg-[#0F0F10] hover:bg-black text-white text-xs font-semibold rounded-[12px] flex items-center justify-center gap-2 transition-all hover:scale-[1.01] shadow-xs cursor-pointer"
+            >
+              <span>Connect</span>
+              <ExternalLink className="h-3.5 w-3.5" />
+            </button>
+          )
         )}
       </div>
     </div>

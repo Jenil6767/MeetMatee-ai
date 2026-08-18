@@ -17,7 +17,7 @@ export default function Navbar() {
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: 'easeOut' }}
-        className="pointer-events-auto w-full max-w-max bg-white/95 backdrop-blur-md border border-black/[0.08] rounded-[22px] shadow-[0_10px_35px_rgba(0,0,0,0.06)] px-[18px] py-[10px] h-[70px] flex items-center justify-between gap-8 md:gap-12"
+        className="pointer-events-auto w-full max-w-5xl bg-white/95 backdrop-blur-md border border-black/[0.08] rounded-[22px] shadow-[0_10px_35px_rgba(0,0,0,0.06)] px-4 md:px-[18px] py-[10px] h-[70px] flex items-center justify-between gap-4 md:gap-8"
       >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
@@ -33,22 +33,22 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav Items */}
-        <div className="hidden md:flex items-center gap-[38px]">
+        <div className="hidden md:flex items-center gap-5 lg:gap-[38px]">
           <a
             href="#features"
-            className="text-[16px] font-medium text-[#222222] hover:text-[#FF5A0A] transition-colors duration-200"
+            className="text-[14px] lg:text-[16px] font-medium text-[#222222] hover:text-[#FF5A0A] transition-colors duration-200 whitespace-nowrap"
           >
             Features
           </a>
           <a
             href="#integrations"
-            className="text-[16px] font-medium text-[#222222] hover:text-[#FF5A0A] transition-colors duration-200"
+            className="text-[14px] lg:text-[16px] font-medium text-[#222222] hover:text-[#FF5A0A] transition-colors duration-200 whitespace-nowrap"
           >
             Integrations
           </a>
           <a
             href="#pricing"
-            className="text-[16px] font-medium text-[#222222] hover:text-[#FF5A0A] transition-colors duration-200"
+            className="text-[14px] lg:text-[16px] font-medium text-[#222222] hover:text-[#FF5A0A] transition-colors duration-200 whitespace-nowrap"
           >
             Pricing
           </a>
@@ -59,20 +59,20 @@ export default function Navbar() {
           {isSignedIn ? (
             <Link
               href="/home"
-              className="inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white text-[15px] font-semibold h-[48px] px-4 rounded-[14px] transition-all duration-300 hover:-translate-y-[2px] shadow-sm group"
+              className="inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white text-[13px] lg:text-[15px] font-semibold h-[42px] lg:h-[48px] px-3 lg:px-4 rounded-[14px] transition-all duration-300 hover:-translate-y-[2px] shadow-sm group whitespace-nowrap"
             >
-              <div className="w-6 h-6 rounded-md bg-[#FF5A0A] flex items-center justify-center mr-2 text-white shrink-0">
-                <ChevronsRight className="w-3.5 h-3.5" />
+              <div className="w-5 h-5 lg:w-6 lg:h-6 rounded-md bg-[#FF5A0A] flex items-center justify-center mr-2 text-white shrink-0">
+                <ChevronsRight className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
               </div>
               <span>Dashboard</span>
             </Link>
           ) : (
             <Link
               href="/sign-in"
-              className="inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white text-[15px] font-semibold h-[48px] px-4 rounded-[14px] transition-all duration-300 hover:-translate-y-[2px] shadow-sm group cursor-pointer"
+              className="inline-flex items-center justify-center bg-[#0F0F10] hover:bg-black text-white text-[13px] lg:text-[15px] font-semibold h-[42px] lg:h-[48px] px-3 lg:px-4 rounded-[14px] transition-all duration-300 hover:-translate-y-[2px] shadow-sm group cursor-pointer whitespace-nowrap"
             >
-              <div className="w-6 h-6 rounded-md bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
-                <ChevronsRight className="w-3.5 h-3.5" />
+              <div className="w-5 h-5 lg:w-6 lg:h-6 rounded-md bg-[#FF5A0A] flex items-center justify-center mr-2 text-white shrink-0 group-hover:scale-105 transition-transform">
+                <ChevronsRight className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
               </div>
               <span>Start Free Trial</span>
             </Link>
