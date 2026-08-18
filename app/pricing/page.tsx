@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { motion } from 'framer-motion'
 import { Check, Loader2 } from 'lucide-react'
+import { useUsage } from '@/app/contexts/UsageContext'
 
 const plans = [
   {
@@ -57,6 +58,7 @@ const plans = [
 
 export default function Pricing() {
   const { user } = useUser()
+  const { usage } = useUsage()
   const [loading, setLoading] = useState<string | null>(null)
 
   const handleSubscribe = async (priceId: string, planName: string) => {
@@ -115,6 +117,7 @@ export default function Pricing() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch max-w-xl mx-auto lg:max-w-none">
         {plans.map((plan, index) => {
           const isLoading = loading === plan.priceId
+          const isCurrentPlan = usage?.currentPlan === plan.id && usage?.subscriptionStatus === 'active'
 
           return (
             <motion.div
@@ -168,11 +171,13 @@ export default function Pricing() {
               {/* Action Button */}
               <button
                 onClick={() => handleSubscribe(plan.priceId, plan.id)}
-                disabled={isLoading}
-                className={`w-full h-[52px] rounded-[16px] font-semibold text-[16px] transition-all duration-300 flex items-center justify-center cursor-pointer ${
-                  plan.popular
-                    ? 'bg-[#0F0F10] hover:bg-black text-white shadow-sm hover:-translate-y-[2px]'
-                    : 'bg-white border border-black/[0.12] text-[#0D0D0D] hover:bg-[#fafafa] hover:-translate-y-[2px]'
+                disabled={isLoading || isCurrentPlan}
+                className={`w-full h-[52px] rounded-[16px] font-semibold text-[16px] transition-all duration-300 flex items-center justify-center ${
+                  isCurrentPlan
+                    ? 'bg-[#F4F4F4] text-[#A0A0A0] border border-black/[0.05] cursor-not-allowed'
+                    : plan.popular
+                      ? 'bg-[#0F0F10] hover:bg-black text-white shadow-sm hover:-translate-y-[2px] cursor-pointer'
+                      : 'bg-white border border-black/[0.12] text-[#0D0D0D] hover:bg-[#fafafa] hover:-translate-y-[2px] cursor-pointer'
                 }`}
               >
                 {isLoading ? (
@@ -180,6 +185,8 @@ export default function Pricing() {
                     <Loader2 className="w-5 h-5 mr-2 animate-spin text-[#FF5A0A]" />
                     Processing...
                   </>
+                ) : isCurrentPlan ? (
+                  'Current Plan'
                 ) : (
                   `Subscribe to ${plan.name}`
                 )}

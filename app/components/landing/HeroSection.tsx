@@ -1,6 +1,5 @@
 'use client'
 
-import Navbar from './Navbar'
 import { SignUpButton, useUser } from '@clerk/nextjs'
 import { motion } from 'framer-motion'
 import { CheckCircle2, ChevronsRight, Play, Sparkles } from 'lucide-react'
@@ -10,11 +9,8 @@ export default function HeroSection() {
   const { isSignedIn } = useUser()
 
   return (
-    <>
-      <Navbar />
-
-      <section className="pt-[140px] md:pt-[170px] pb-12 md:pb-16 px-5 sm:px-8 max-w-[1280px] mx-auto overflow-hidden">
-        <div className="max-w-[850px] mx-auto text-center flex flex-col items-center">
+    <section className="pt-[60px] md:pt-[80px] pb-12 md:pb-16 px-5 sm:px-8 max-w-[1280px] mx-auto overflow-hidden">
+      <div className="max-w-[850px] mx-auto text-center flex flex-col items-center">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -127,6 +123,5 @@ export default function HeroSection() {
           </motion.div>
         </div>
       </section>
-    </>
   )
 }

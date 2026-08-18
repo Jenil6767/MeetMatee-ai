@@ -1,3 +1,4 @@
+import Navbar from "./components/landing/Navbar";
 import HeroSection from "./components/landing/HeroSection";
 import FeaturesSection from "./components/landing/FeaturesSection";
 import WhyChooseSection from "./components/landing/WhyChooseSection";
@@ -12,7 +13,7 @@ import Footer from "./components/landing/Footer";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#F8F6F1] text-[#0D0D0D] relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#F8F6F1] text-[#0D0D0D] relative font-sans">
       {/* Soft Warm Radial Gradient Glow */}
       <div
         className="absolute top-0 left-0 right-0 h-[1000px] pointer-events-none z-0"
@@ -22,6 +23,7 @@ export default function Home() {
         }}
       />
       <div className="relative z-10">
+        <Navbar />
         <HeroSection />
         <FeaturesSection />
         <WhyChooseSection />

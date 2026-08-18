@@ -113,6 +113,26 @@ function Settings() {
     }
   }
 
+  const [isManagingPlan, setIsManagingPlan] = useState(false)
+
+  const handleManageSubscription = async () => {
+    setIsManagingPlan(true)
+    try {
+      const response = await fetch('/api/stripe/create-portal', { method: 'POST' })
+      const data = await response.json()
+      
+      if (response.ok && data.url) {
+        window.location.href = data.url
+      } else {
+        console.error('Failed to create portal session:', data.error)
+      }
+    } catch (error) {
+      console.error('Error creating portal session:', error)
+    } finally {
+      setIsManagingPlan(false)
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px]">
@@ -174,7 +194,17 @@ function Settings() {
 
           <div className="pt-4 flex items-center justify-between text-xs text-[#808080]">
             <span className="font-normal tracking-[-0.01em]">Account ID: {user?.id ? `${user.id.slice(0, 14)}...` : 'Active'}</span>
-            <span className="text-[#18A957] font-semibold">● Active Member</span>
+            {userPlan !== 'free' ? (
+              <button
+                onClick={handleManageSubscription}
+                disabled={isManagingPlan}
+                className="text-[#FF5A0A] hover:text-[#e04e08] font-semibold underline underline-offset-2 transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                {isManagingPlan ? 'Redirecting...' : 'Manage Subscription'}
+              </button>
+            ) : (
+              <span className="text-[#18A957] font-semibold">● Active Member</span>
+            )}
           </div>
         </div>
 
