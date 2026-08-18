@@ -1,5 +1,6 @@
 import { useAuth } from "@clerk/nextjs"
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 export interface CalendarEvent {
     id: string
@@ -39,6 +40,7 @@ export function useMeetings() {
     const [error, setError] = useState<string>('')
     const [botToggles, setBotToggles] = useState<{ [key: string]: boolean }>({})
     const [initialLoading, setInitialLoading] = useState(true)
+    const [searchQuery, setSearchQuery] = useState('')
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1)
@@ -50,6 +52,18 @@ export function useMeetings() {
         if (userId) {
             fetchUpcomingEvents()
             fetchPastMeetings(1)
+        }
+
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search)
+            const err = params.get('error')
+            if (err === 'email_mismatch') {
+                toast.error('Connection Failed', {
+                    description: 'Please connect the Google Calendar that matches your account email.',
+                    duration: 5000,
+                })
+                window.history.replaceState({}, document.title, window.location.pathname)
+            }
         }
     }, [userId])
 
@@ -100,10 +114,15 @@ export function useMeetings() {
 
     }
 
-    const fetchPastMeetings = async (page: number = 1) => {
+    const fetchPastMeetings = async (page: number = 1, search: string = searchQuery) => {
         setPastLoading(true)
         try {
-            const response = await fetch(`/api/meetings/past?page=${page}&limit=${PAGE_LIMIT}`)
+            const queryParams = new URLSearchParams({
+                page: page.toString(),
+                limit: PAGE_LIMIT.toString(),
+                ...(search ? { search } : {})
+            })
+            const response = await fetch(`/api/meetings/past?${queryParams.toString()}`)
             const result = await response.json()
 
             if (!response.ok) {
@@ -127,6 +146,16 @@ export function useMeetings() {
     const goToPage = (page: number) => {
         if (page < 1 || page > totalPages) return
         fetchPastMeetings(page)
+    }
+
+    const handleSearch = (query: string) => {
+        setSearchQuery(query)
+        fetchPastMeetings(1, query)
+    }
+
+    const clearSearch = () => {
+        setSearchQuery('')
+        fetchPastMeetings(1, '')
     }
 
     const toggleBot = async (eventId: string) => {
@@ -218,7 +247,10 @@ export function useMeetings() {
         toggleBot,
         directOAuth,
         getAttendeeList,
-        getInitials
+        getInitials,
+        searchQuery,
+        handleSearch,
+        clearSearch
     }
 
 }

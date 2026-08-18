@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import PastMeetings from './components/PastMeetings'
 import UpcomingMeetings from './components/UpcomingMeetings'
 import { motion } from 'framer-motion'
+import { Search, X } from 'lucide-react'
 
 function Home() {
   const {
@@ -28,6 +29,9 @@ function Home() {
     directOAuth,
     getAttendeeList,
     getInitials,
+    searchQuery,
+    handleSearch,
+    clearSearch
   } = useMeetings()
 
   const router = useRouter()
@@ -45,11 +49,38 @@ function Home() {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col gap-8">
+      {/* Search Bar - Full Width */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className="w-full relative"
+      >
+        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <Search className="h-5 w-5 text-[#808080]" />
+        </div>
+        <input
+          type="text"
+          placeholder="Search meetings by title..."
+          value={searchQuery}
+          onChange={(e) => handleSearch(e.target.value)}
+          className="w-full pl-12 pr-10 py-3.5 text-[15px] bg-white border border-black/[0.08] rounded-2xl focus:outline-none focus:border-[#FF5A0A] focus:ring-4 focus:ring-[#FF5A0A]/10 transition-all shadow-sm"
+        />
+        {searchQuery && (
+          <button
+            onClick={clearSearch}
+            className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#808080] hover:text-[#111111] transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        )}
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
+        transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
         className="flex flex-col lg:flex-row gap-8 items-start"
       >
         {/* Main Left Area: Past Meetings */}

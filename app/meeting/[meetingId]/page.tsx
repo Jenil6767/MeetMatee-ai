@@ -215,6 +215,7 @@ function MeetingDetail() {
         {/* Audio Player Full Width across entire page width */}
         <CustomAudioPlayer
           recordingUrl={meetingData?.recordingUrl}
+          meetingId={meetingId}
           isOwner={isOwner}
         />
       </motion.div>

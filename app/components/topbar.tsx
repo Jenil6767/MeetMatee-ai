@@ -61,12 +61,12 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
             </span>
           </div>
 
-          <div className="p-1 rounded-full border border-black/[0.08] bg-[#F8F6F1] shadow-xs">
+          <div className="flex shrink-0">
             <UserButton
               afterSignOutUrl="/"
               appearance={{
                 elements: {
-                  avatarBox: 'w-9 h-9 rounded-full',
+                  avatarBox: 'w-10 h-10 rounded-full',
                 },
               }}
             />

@@ -22,9 +22,18 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: "user not found" }, { status: 404 })
         }
 
-        const where = {
+        const search = searchParams.get('search') || ''
+
+        const where: any = {
             userId: user.id,
             meetingEnded: true
+        }
+
+        if (search) {
+            where.title = {
+                contains: search,
+                mode: 'insensitive'
+            }
         }
 
         const [pastMeetings, total] = await Promise.all([
