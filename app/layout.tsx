@@ -32,6 +32,15 @@ const bricolageGrotesque = Bricolage_Grotesque({
 export const metadata: Metadata = {
   title: "MeetMatee - AI-Powered Meeting Assistant",
   description: "Automatic summaries, action items, and intelligent insights for every meeting.",
+  icons: {
+    icon: [
+      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    shortcut: "/icon.png",
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -55,6 +64,12 @@ export default function RootLayout({
       }}
     >
       <html lang="en" suppressHydrationWarning className="dark">
+        <head>
+          <link rel="icon" href="/icon.png" type="image/png" />
+          <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+          <link rel="shortcut icon" href="/icon.png" type="image/png" />
+          <link rel="apple-touch-icon" href="/apple-icon.png" />
+        </head>
         <body
           className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${bricolageGrotesque.variable} antialiased bg-background text-foreground`}
         >

@@ -1,6 +1,7 @@
 import { useAuth } from "@clerk/nextjs"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import useSWR from "swr"
 
 export interface CalendarEvent {
     id: string
@@ -30,17 +31,88 @@ export interface PastMeeting {
     speakers?: any
 }
 
+interface UpcomingResult {
+    connected: boolean
+    events: CalendarEvent[]
+    error?: string
+}
+
+const upcomingFetcher = async (): Promise<UpcomingResult> => {
+    const statusResponse = await fetch('/api/user/calendar-status')
+    const statusData = await statusResponse.json()
+
+    if (!statusData.connected) {
+        return {
+            connected: false,
+            events: [],
+            error: 'Calendar not connected for auto-sync. Connect to enable auto syncing.'
+        }
+    }
+
+    const response = await fetch('/api/meetings/upcoming')
+    const result = await response.json()
+
+    if (!response.ok) {
+        throw new Error(result.error || 'Failed to fetch meetings')
+    }
+
+    return {
+        connected: Boolean(result.connected),
+        events: (result.events || []) as CalendarEvent[]
+    }
+}
+
 export function useMeetings() {
     const { userId } = useAuth()
-    const [upcomingEvents, setUpcomingEvents] = useState<CalendarEvent[]>([])
     const [pastMeetings, setPastMeetings] = useState<PastMeeting[]>([])
-    const [loading, setLoading] = useState(false)
     const [pastLoading, setPastLoading] = useState(false)
-    const [connected, setConnected] = useState(false)
-    const [error, setError] = useState<string>('')
     const [botToggles, setBotToggles] = useState<{ [key: string]: boolean }>({})
-    const [initialLoading, setInitialLoading] = useState(true)
     const [searchQuery, setSearchQuery] = useState('')
+
+    const [manualRefreshing, setManualRefreshing] = useState(false)
+
+    // SWR Hook for upcoming meetings: revalidates on tab focus, network reconnect, and periodic interval
+    const {
+        data: upcomingData,
+        error: swrError,
+        isLoading: upcomingIsLoading,
+        isValidating: upcomingIsValidating,
+        mutate: mutateUpcoming
+    } = useSWR<UpcomingResult>(
+        userId ? '/api/meetings/upcoming' : null,
+        upcomingFetcher,
+        {
+            revalidateOnFocus: true,     // Automatically refreshes as soon as user switches back to tab
+            revalidateOnReconnect: true, // Refreshes if connection drops & recovers
+            refreshInterval: 30000,      // Polling every 30s silently in the background
+            dedupingInterval: 4000,      // Deduplicate rapid requests within 4 seconds
+            shouldRetryOnError: true,
+            errorRetryCount: 3,
+        }
+    )
+
+    const upcomingEvents = upcomingData?.events ?? []
+    const connected = upcomingData?.connected ?? false
+    const error = swrError
+        ? (swrError.message || 'Failed to fetch calendar events. Please try again.')
+        : (upcomingData?.error ?? '')
+    const loading = upcomingIsLoading || upcomingIsValidating || manualRefreshing
+    const initialLoading = !upcomingData && upcomingIsLoading
+
+    // Sync bot toggles with fetched upcoming events without overwriting active user edits
+    useEffect(() => {
+        if (upcomingData?.events) {
+            setBotToggles(prev => {
+                const next = { ...prev }
+                upcomingData.events.forEach((event: CalendarEvent) => {
+                    if (next[event.id] === undefined) {
+                        next[event.id] = event.botScheduled ?? true
+                    }
+                })
+                return next
+            })
+        }
+    }, [upcomingData?.events])
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1)
@@ -50,7 +122,6 @@ export function useMeetings() {
 
     useEffect(() => {
         if (userId) {
-            fetchUpcomingEvents()
             fetchPastMeetings(1)
         }
 
@@ -82,50 +153,12 @@ export function useMeetings() {
     }, [userId, pastMeetings, currentPage, searchQuery])
 
     const fetchUpcomingEvents = async () => {
-        setLoading(true)
-        setError('')
-
+        setManualRefreshing(true)
         try {
-            const statusResponse = await fetch('/api/user/calendar-status')
-            const statusData = await statusResponse.json()
-
-            if (!statusData.connected) {
-                setConnected(false)
-                setUpcomingEvents([])
-                setError('Calendar not connected for auto-sync. Connect to enable auto syncing.')
-                setLoading(false)
-                setInitialLoading(false)
-                return
-            }
-
-            const response = await fetch('/api/meetings/upcoming')
-            const result = await response.json()
-
-            if (!response.ok) {
-                setError(result.error || 'Failed to fetch meetings')
-                setConnected(false)
-                setInitialLoading(false)
-                return
-            }
-
-            setUpcomingEvents(result.events as CalendarEvent[])
-            setConnected(result.connected)
-
-            const toggles: { [key: string]: boolean } = {}
-            result.events.forEach((event: CalendarEvent) => {
-                toggles[event.id] = event.botScheduled ?? true
-            })
-
-            setBotToggles(toggles)
-
-        } catch (error) {
-            setError("failed to fetch calnedar events. please try agan")
-            setConnected(false)
+            await mutateUpcoming()
+        } finally {
+            setManualRefreshing(false)
         }
-
-        setLoading(false)
-        setInitialLoading(false)
-
     }
 
     const fetchPastMeetings = async (page: number = 1, search: string = searchQuery) => {
