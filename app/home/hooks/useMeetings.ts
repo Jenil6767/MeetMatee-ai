@@ -67,6 +67,20 @@ export function useMeetings() {
         }
     }, [userId])
 
+    // Auto-refresh past meetings if any meeting is still awaiting transcript processing
+    useEffect(() => {
+        if (!userId || pastMeetings.length === 0) return
+
+        const hasPendingMeetings = pastMeetings.some(m => !m.transcriptReady)
+        if (!hasPendingMeetings) return
+
+        const interval = setInterval(() => {
+            fetchPastMeetings(currentPage, searchQuery)
+        }, 5000)
+
+        return () => clearInterval(interval)
+    }, [userId, pastMeetings, currentPage, searchQuery])
+
     const fetchUpcomingEvents = async () => {
         setLoading(true)
         setError('')

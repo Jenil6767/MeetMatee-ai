@@ -2,6 +2,7 @@ import { useChatCore } from "@/app/hooks/chat/useChatCore"
 import { useAuth } from "@clerk/nextjs"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
+import useSWR from "swr"
 
 export interface MeetingData {
     id: string
@@ -26,6 +27,15 @@ export interface MeetingData {
         email?: string
     }
     ragProcessed?: boolean
+    transcriptReady?: boolean
+}
+
+const fetcher = async (url: string) => {
+    const res = await fetch(url)
+    if (!res.ok) {
+        throw new Error('Failed to fetch meeting data')
+    }
+    return res.json()
 }
 
 export function useMeetingDetail() {
@@ -39,8 +49,23 @@ export function useMeetingDetail() {
     const [activeTab, setActiveTab] = useState<'summary' | 'transcript'>('summary')
     const [localActionItems, setLocalActionItems] = useState<any[]>([])
 
-    const [meetingData, setMeetingData] = useState<MeetingData | null>(null)
-    const [loading, setLoading] = useState(true)
+    const shouldFetch = Boolean(isLoaded && meetingId)
+    const { data: meetingData, error, isLoading, mutate } = useSWR<MeetingData>(
+        shouldFetch ? `/api/meetings/${meetingId}` : null,
+        fetcher,
+        {
+            refreshInterval: (data) => {
+                // If meeting is already fully processed with AI and transcript, stop polling
+                if (data?.processed && data?.transcriptReady) {
+                    return 0
+                }
+                // Poll every 3 seconds while waiting for meeting to finish or AI to process
+                return 3000
+            },
+            revalidateOnFocus: true,
+            dedupingInterval: 2000,
+        }
+    )
 
     const chat = useChatCore({
         apiEndpoint: '/api/rag/chat-meeting',
@@ -75,52 +100,32 @@ export function useMeetingDetail() {
     }
 
     useEffect(() => {
-        const fetchMeetingData = async () => {
-            try {
-                const response = await fetch(`/api/meetings/${meetingId}`)
-                if (response.ok) {
-                    const data = await response.json()
-                    setMeetingData(data)
+        if (meetingData && isLoaded) {
+            const ownerStatus = userId === meetingData.userId
+            setIsOwner(ownerStatus)
+            setUserChecked(true)
 
-                    if (isLoaded) {
-                        const ownerStatus = userId === data.userId
-                        setIsOwner(ownerStatus)
-                        setUserChecked(true)
-                    }
-
-                    if (data.actionItems && data.actionItems.length > 0) {
-                        setLocalActionItems(data.actionItems)
-                    } else {
-                        setLocalActionItems([])
-                    }
-                }
-            } catch (error) {
-                console.error('error fetching meeting:', error)
-            } finally {
-                setLoading(false)
+            if (meetingData.actionItems && meetingData.actionItems.length > 0) {
+                setLocalActionItems(meetingData.actionItems)
+            } else {
+                setLocalActionItems([])
             }
+        } else if (!isLoading && !meetingData) {
+            setUserChecked(true)
         }
-        if (isLoaded) {
-            fetchMeetingData()
-        }
-    }, [meetingId, userId, isLoaded])
+    }, [meetingData, userId, isLoaded, isLoading])
 
     useEffect(() => {
         const processTranscript = async () => {
             try {
-                const meetingResponse = await fetch(`/api/meetings/${meetingId}`)
-                if (!meetingResponse.ok) {
-                    return
-                }
-                const meeting = await meetingResponse.json()
-
-                if (meeting.transcript && !meeting.ragProcessed && userId == meeting.userId) {
+                if (!meetingData) return
+                if (meetingData.transcript && !meetingData.ragProcessed && userId === meetingData.userId) {
                     let transcriptText = ''
-                    if (typeof meeting.transcript === 'string') {
-                        transcriptText = meeting.transcript
-                    } else if (Array.isArray(meeting.transcript)) {
-                        transcriptText = meeting.transcript
-                            .map((segment: any) => `${segment.speaker}: ${segment.words.map((w: any) => w.word).join(' ')}`)
+                    if (typeof meetingData.transcript === 'string') {
+                        transcriptText = meetingData.transcript
+                    } else if (Array.isArray(meetingData.transcript)) {
+                        transcriptText = meetingData.transcript
+                            .map((segment: any) => `${segment.speaker || 'Speaker'}: ${(segment.words || []).map((w: any) => w.word).join(' ')}`)
                             .join('\n')
                     }
 
@@ -132,20 +137,20 @@ export function useMeetingDetail() {
                         body: JSON.stringify({
                             meetingId,
                             transcript: transcriptText,
-                            meetingTitle: meeting.title
+                            meetingTitle: meetingData.title
                         })
                     })
+
+                    mutate()
                 }
             } catch (error) {
                 console.error('error checking RAG processing:', error)
-
             }
         }
-        if (isLoaded && userChecked) {
+        if (isLoaded && userChecked && meetingData) {
             processTranscript()
         }
-    }, [meetingId, userId, isLoaded, userChecked])
-
+    }, [meetingData, meetingId, userId, isLoaded, userChecked, mutate])
 
     const deleteActionItem = async (id: number) => {
         if (!isOwner) {
@@ -153,23 +158,14 @@ export function useMeetingDetail() {
         }
 
         setLocalActionItems(prev => prev.filter(item => item.id !== id))
-
+        mutate()
     }
 
-    const addActionItem = async (text: string) => {
+    const addActionItem = async (_text: string) => {
         if (!isOwner) {
             return
         }
-        try {
-            const response = await fetch(`/api/meetings/${meetingId}`)
-            if (response.ok) {
-                const data = await response.json()
-                setMeetingData(data)
-                setLocalActionItems(data.actionItems || [])
-            }
-        } catch (error) {
-            console.error('error refetching meeting data: ', error)
-        }
+        mutate()
     }
 
     const displayActionItems = localActionItems.length > 0
@@ -200,10 +196,8 @@ export function useMeetingDetail() {
         setActiveTab,
         localActionItems,
         setLocalActionItems,
-        meetingData,
-        setMeetingData,
-        loading,
-        setLoading,
+        meetingData: meetingData ?? null,
+        loading: isLoading || (!meetingData && !error),
         chatInput: chat.chatInput,
         setChatInput: chat.setChatInput,
         messages: chat.messages,
@@ -218,7 +212,7 @@ export function useMeetingDetail() {
         deleteActionItem,
         addActionItem,
         displayActionItems,
-        meetingInfoData
+        meetingInfoData,
+        mutate
     }
-
 }

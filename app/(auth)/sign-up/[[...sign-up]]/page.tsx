@@ -5,10 +5,20 @@ import { ShieldCheck } from 'lucide-react'
 export default function Page() {
   return (
     <div className="w-full flex flex-col">
-      {/* Clerk — card provides the white surface and header */}
       <SignUp
         afterSignUpUrl="/"
+        localization={{
+          signUp: {
+            start: {
+              title: 'Create your MeetMatee account',
+            },
+          },
+        }}
         appearance={{
+          layout: {
+            logoImageUrl: '/meetMatee.png',
+            logoPlacement: 'inside',
+          },
           variables: {
             colorPrimary: '#FF5A0A',
             colorBackground: '#ffffff',
@@ -28,6 +38,8 @@ export default function Page() {
               '!border !border-[rgba(0,0,0,0.06)]',
               '!p-5 sm:!p-6',
             ].join(' '),
+            logoBox: '!flex !justify-center !items-center !mb-2.5 !mx-auto',
+            logoImage: '!h-9 sm:!h-10 !w-auto !object-contain',
             header: '!text-center !mb-2.5 !mt-0',
             headerTitle: '!text-[19px] !font-bold !tracking-[-0.025em] !text-[#111111] !leading-tight !text-center',
             headerSubtitle: '!hidden',

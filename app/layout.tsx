@@ -40,7 +40,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      localization={{
+        signIn: {
+          start: {
+            title: "Sign in to MeetMatee",
+          },
+        },
+        signUp: {
+          start: {
+            title: "Sign up for MeetMatee",
+          },
+        },
+      }}
+    >
       <html lang="en" suppressHydrationWarning className="dark">
         <body
           className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${bricolageGrotesque.variable} antialiased bg-background text-foreground`}
