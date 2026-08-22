@@ -71,7 +71,7 @@ export function useMeetings() {
 
     const [manualRefreshing, setManualRefreshing] = useState(false)
 
-    // SWR Hook for upcoming meetings: revalidates on tab focus, network reconnect, and periodic interval
+    // SWR Hook for upcoming meetings: silent background polling (no aggressive requests on tab switches)
     const {
         data: upcomingData,
         error: swrError,
@@ -82,10 +82,10 @@ export function useMeetings() {
         userId ? '/api/meetings/upcoming' : null,
         upcomingFetcher,
         {
-            revalidateOnFocus: true,     // Automatically refreshes as soon as user switches back to tab
-            revalidateOnReconnect: true, // Refreshes if connection drops & recovers
-            refreshInterval: 30000,      // Polling every 30s silently in the background
-            dedupingInterval: 4000,      // Deduplicate rapid requests within 4 seconds
+            revalidateOnFocus: false,    // Do NOT fire API requests every time the user switches tabs
+            revalidateOnReconnect: true, // Auto-sync if internet connection drops & recovers
+            refreshInterval: 60000,      // Silent background poll every 60 seconds (max 60s for new/canceled events)
+            dedupingInterval: 10000,     // Deduplicate requests within 10 seconds
             shouldRetryOnError: true,
             errorRetryCount: 3,
         }
