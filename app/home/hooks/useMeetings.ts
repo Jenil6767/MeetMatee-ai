@@ -27,6 +27,7 @@ export interface PastMeeting {
     endTime: Date
     attendees?: any
     transcriptReady: boolean
+    processed: boolean
     recordingUrl?: string | null
     speakers?: any
 }
@@ -142,7 +143,7 @@ export function useMeetings() {
     useEffect(() => {
         if (!userId || pastMeetings.length === 0) return
 
-        const hasPendingMeetings = pastMeetings.some(m => !m.transcriptReady)
+        const hasPendingMeetings = pastMeetings.some(m => !m.transcriptReady || !m.processed)
         if (!hasPendingMeetings) return
 
         const interval = setInterval(() => {

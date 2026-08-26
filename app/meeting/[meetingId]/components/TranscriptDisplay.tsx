@@ -15,7 +15,7 @@ interface TranscriptSegment {
 }
 
 interface TranscriptDisplayProps {
-  transcript: TranscriptSegment[]
+  transcript: TranscriptSegment[] | string
 }
 
 export default function TranscriptDisplay({ transcript }: TranscriptDisplayProps) {
@@ -35,10 +35,25 @@ export default function TranscriptDisplay({ transcript }: TranscriptDisplayProps
     return segment.words.map((word) => word.word).join(' ')
   }
 
-  if (!transcript || transcript.length === 0) {
+  if (!transcript || (Array.isArray(transcript) && transcript.length === 0)) {
     return (
       <div className="bg-white rounded-[24px] p-8 border border-black/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.06)] text-center">
         <p className="text-sm font-medium text-[#5A5A5A]">No transcript available</p>
+      </div>
+    )
+  }
+
+  if (typeof transcript === 'string') {
+    return (
+      <div className="bg-white rounded-[24px] p-8 border border-black/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.06)]">
+        <h3 className="text-lg font-bold text-[#111111] mb-6 tracking-tight">
+          Meeting Transcript
+        </h3>
+        <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <p className="text-sm text-[#5A5A5A] leading-relaxed whitespace-pre-wrap">
+            {transcript}
+          </p>
+        </div>
       </div>
     )
   }
