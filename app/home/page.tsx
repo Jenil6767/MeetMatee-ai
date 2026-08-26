@@ -7,6 +7,9 @@ import PastMeetings from './components/PastMeetings'
 import UpcomingMeetings from './components/UpcomingMeetings'
 import { motion } from 'framer-motion'
 import { Search, X } from 'lucide-react'
+import { useEffect } from 'react'
+import { useUsage } from '@/app/contexts/UsageContext'
+import { toast } from 'sonner'
 
 function Home() {
   const {
@@ -31,10 +34,59 @@ function Home() {
     getInitials,
     searchQuery,
     handleSearch,
-    clearSearch
+    clearSearch,
+    syncCalendar
   } = useMeetings()
 
   const router = useRouter()
+  const { refreshUsage } = useUsage()
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const success = params.get('success')
+      const sessionId = params.get('session_id')
+
+      if (success === 'true') {
+        const verifySession = async () => {
+          if (sessionId) {
+            toast.loading('Verifying your payment...', { id: 'verify-payment' })
+            try {
+              const res = await fetch('/api/stripe/verify-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ session_id: sessionId })
+              })
+              
+              if (res.ok) {
+                toast.success('Subscription Upgraded!', {
+                  id: 'verify-payment',
+                  description: 'Your new plan is now active.',
+                  duration: 5000,
+                })
+              } else {
+                toast.dismiss('verify-payment')
+              }
+            } catch (error) {
+              toast.dismiss('verify-payment')
+            }
+          } else {
+            // Fallback if no session_id
+            toast.success('Subscription Upgraded!', {
+              description: 'Your new plan is now active.',
+              duration: 5000,
+            })
+          }
+          
+          refreshUsage()
+          window.history.replaceState({}, document.title, window.location.pathname)
+        }
+
+        verifySession()
+      }
+    }
+  }, [refreshUsage])
+
   const handleMeetingClick = (meetingId: string) => {
     router.push(`/meeting/${meetingId}`)
   }
@@ -125,6 +177,7 @@ function Home() {
               onRefresh={fetchUpcomingEvents}
               onToggleBot={toggleBot}
               onConnectCalendar={directOAuth}
+              onSyncCalendar={syncCalendar}
             />
           </div>
         </div>

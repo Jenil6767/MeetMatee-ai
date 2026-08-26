@@ -16,6 +16,7 @@ interface UpcomingMeetingsProps {
   onRefresh: () => void
   onToggleBot: (eventId: string) => void
   onConnectCalendar: () => void
+  onSyncCalendar?: () => void
 }
 
 function UpcomingMeetings({
@@ -28,6 +29,7 @@ function UpcomingMeetings({
   onRefresh,
   onToggleBot,
   onConnectCalendar,
+  onSyncCalendar,
 }: UpcomingMeetingsProps) {
   return (
     <div className="space-y-6">
@@ -89,10 +91,10 @@ function UpcomingMeetings({
               {upcomingEvents.length} events
             </span>
             <button
-              onClick={onRefresh}
+              onClick={onSyncCalendar || onRefresh}
               disabled={loading}
               className="p-1.5 bg-[#F8F6F1] hover:bg-[#FFF2EA] text-[#5A5A5A] hover:text-[#FF5A0A] rounded-[10px] border border-black/[0.08] transition-colors cursor-pointer"
-              title="Refresh events"
+              title="Sync & Refresh events"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             </button>

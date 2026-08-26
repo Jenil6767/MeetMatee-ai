@@ -161,6 +161,24 @@ export function useMeetings() {
         }
     }
 
+    const syncCalendar = async () => {
+        setManualRefreshing(true)
+        try {
+            const response = await fetch('/api/meetings/sync', { method: 'POST' })
+            if (response.ok) {
+                await mutateUpcoming()
+            } else {
+                toast.error('Failed to sync calendar', {
+                    description: 'Please check your connection and try again.',
+                })
+            }
+        } catch (error) {
+            toast.error('Error', { description: 'Failed to sync calendar.' })
+        } finally {
+            setManualRefreshing(false)
+        }
+    }
+
     const fetchPastMeetings = async (page: number = 1, search: string = searchQuery) => {
         setPastLoading(true)
         try {
@@ -169,7 +187,7 @@ export function useMeetings() {
                 limit: PAGE_LIMIT.toString(),
                 ...(search ? { search } : {})
             })
-            const response = await fetch(`/api/meetings/past?${queryParams.toString()}`)
+            const response = await fetch(`/api/meetings/past?${queryParams.toString()}`, { cache: 'no-store' })
             const result = await response.json()
 
             if (!response.ok) {
@@ -297,7 +315,8 @@ export function useMeetings() {
         getInitials,
         searchQuery,
         handleSearch,
-        clearSearch
+        clearSearch,
+        syncCalendar
     }
 
 }

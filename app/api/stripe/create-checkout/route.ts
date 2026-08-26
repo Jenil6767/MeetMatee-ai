@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
                 }
             ],
             mode: 'subscription',
-            success_url: `${process.env.NEXT_PUBLIC_APP_URL}/home?success=true`,
+            success_url: `${process.env.NEXT_PUBLIC_APP_URL}/home?success=true&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
             metadata: {
                 clerkUserId: userId,
