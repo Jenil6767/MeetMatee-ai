@@ -36,7 +36,7 @@ export async function processTranscript(
             userId,
             chunkIndex: chunk.chunkIndex,
             content: chunk.content,
-            speakerName: extractSpeaker(chunk.content),
+            speakerName: extractSpeaker(chunk.content) || 'Speaker',
             meetingTitle: meetingTitle || 'Untitled Meeting'
 
         }

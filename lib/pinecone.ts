@@ -11,11 +11,23 @@ export async function saveManyVectors(vectors: Array<{
     embedding: number[]
     metadata: any
 }>) {
-    const upsertData = vectors.map(v => ({
-        id: v.id,
-        values: v.embedding,
-        metadata: v.metadata
-    }))
+    const upsertData = vectors.map(v => {
+        // Pinecone metadata values must be string, number, boolean, or list of strings (never null or undefined)
+        const cleanMetadata: Record<string, any> = {}
+        if (v.metadata) {
+            for (const [key, value] of Object.entries(v.metadata)) {
+                if (value !== null && value !== undefined) {
+                    cleanMetadata[key] = value
+                }
+            }
+        }
+
+        return {
+            id: v.id,
+            values: v.embedding,
+            metadata: cleanMetadata
+        }
+    })
 
     await index.upsert(upsertData)
 }
@@ -34,4 +46,3 @@ export async function searchVectors(
 
     return result.matches || []
 }
-
