@@ -139,16 +139,18 @@ export function useMeetings() {
         }
     }, [userId])
 
-    // Auto-refresh past meetings if any meeting is still awaiting transcript processing
+    // Auto-refresh past meetings silently in the background:
+    // - Every 5 seconds if any meeting is still processing
+    // - Every 15 seconds normally so new completed meetings pop up automatically with zero manual refreshes
     useEffect(() => {
-        if (!userId || pastMeetings.length === 0) return
+        if (!userId) return
 
         const hasPendingMeetings = pastMeetings.some(m => !m.transcriptReady || !m.processed)
-        if (!hasPendingMeetings) return
+        const pollInterval = hasPendingMeetings ? 5000 : 15000
 
         const interval = setInterval(() => {
-            fetchPastMeetings(currentPage, searchQuery)
-        }, 5000)
+            fetchPastMeetings(currentPage, searchQuery, false)
+        }, pollInterval)
 
         return () => clearInterval(interval)
     }, [userId, pastMeetings, currentPage, searchQuery])
@@ -180,8 +182,8 @@ export function useMeetings() {
         }
     }
 
-    const fetchPastMeetings = async (page: number = 1, search: string = searchQuery) => {
-        setPastLoading(true)
+    const fetchPastMeetings = async (page: number = 1, search: string = searchQuery, showSpinner: boolean = true) => {
+        if (showSpinner) setPastLoading(true)
         try {
             const queryParams = new URLSearchParams({
                 page: page.toString(),
@@ -205,8 +207,9 @@ export function useMeetings() {
             setTotalMeetings(result.total ?? 0)
         } catch (error) {
             console.error('faild to fetch past meetings:', error)
+        } finally {
+            if (showSpinner) setPastLoading(false)
         }
-        setPastLoading(false)
     }
 
     const goToPage = (page: number) => {
@@ -259,12 +262,12 @@ export function useMeetings() {
     }
 
     const directOAuth = async () => {
-        setLoading(true)
+        setManualRefreshing(true)
         try {
             window.location.href = '/api/auth/google/direct-connect'
         } catch {
-            setError('Failed to start direct OAuth')
-            setLoading(false)
+            toast.error('Failed to start direct OAuth')
+            setManualRefreshing(false)
         }
     }
 
