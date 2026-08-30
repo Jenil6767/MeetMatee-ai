@@ -41,6 +41,9 @@ export const metadata: Metadata = {
     shortcut: "/icon.png",
     apple: "/apple-icon.png",
   },
+  verification: {
+    google: "p082gXCmdyd3WN2eau9QlJzF-w5ZfkAgd22jrE8aUwM",
+  },
 };
 
 export default function RootLayout({
@@ -65,12 +68,14 @@ export default function RootLayout({
     >
       <html lang="en" suppressHydrationWarning className="dark">
         <head>
+          <meta name="google-site-verification" content="p082gXCmdyd3WN2eau9QlJzF-w5ZfkAgd22jrE8aUwM" />
           <link rel="icon" href="/icon.png" type="image/png" />
           <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
           <link rel="shortcut icon" href="/icon.png" type="image/png" />
           <link rel="apple-touch-icon" href="/apple-icon.png" />
           <script src="https://script.supademo.com/supademo.js" async></script>
         </head>
+
         <body
           className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${bricolageGrotesque.variable} antialiased bg-background text-foreground`}
         >
