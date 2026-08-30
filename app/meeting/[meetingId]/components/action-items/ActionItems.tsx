@@ -33,13 +33,7 @@ function ActionItems({
   const addToIntegration = async (platform: string, actionItem: ActionItem) => {
     setLoading((prev) => ({ ...prev, [`${platform}-${actionItem.id}`]: true }))
     try {
-      toast(`✅ Action item added to ${platform}`, {
-        action: {
-          label: 'OK',
-          onClick: () => {},
-        },
-      })
-      await fetch('/api/integrations/action-items', {
+      const response = await fetch('/api/integrations/action-items', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,10 +44,22 @@ function ActionItems({
           meetingId,
         }),
       })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        toast.success(`Action item added to ${platform}!`)
+      } else {
+        toast.error(data.error || `Failed to add action item to ${platform}`)
+      }
+    } catch (error) {
+      console.error(`Failed to add action item to ${platform}:`, error)
+      toast.error(`Failed to add action item to ${platform}`)
     } finally {
       setLoading((prev) => ({ ...prev, [`${platform}-${actionItem.id}`]: false }))
     }
   }
+
 
   const handleAddNewItem = async () => {
     if (!newItemText.trim()) return

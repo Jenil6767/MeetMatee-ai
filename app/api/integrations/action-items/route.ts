@@ -71,18 +71,21 @@ export async function POST(request: NextRequest) {
             const jira = new JiraAPI()
 
             const title = actionItem || 'Untitled action item'
-            const description = `Action item from meeting ${meetingId || 'Unkown'}`
+            const description = `Action item from meeting ${meetingId || 'Unknown'}`
+            const email = integration.refreshToken || null
 
-            const issue = await jira.createIssue(
+            await jira.createIssue(
                 integration.accessToken,
                 integration.workspaceId,
                 integration.projectId,
                 {
                     title,
                     description
-                }
+                },
+                email
             )
         }
+
 
         else if (platform === 'asana') {
             if (!integration.projectId) {
