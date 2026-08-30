@@ -34,7 +34,7 @@ function MeetingHeader({
     try {
       setIsPosting(true)
       toast('✅ Posted to Slack', {
-        action: { label: 'OK', onClick: () => {} },
+        action: { label: 'OK', onClick: () => { } },
       })
       await fetch('/api/slack/post-meeting', {
         method: 'POST',
@@ -60,7 +60,7 @@ function MeetingHeader({
       await navigator.clipboard.writeText(shareUrl)
       setCopied(true)
       toast('✅ Meeting link copied!', {
-        action: { label: 'OK', onClick: () => {} },
+        action: { label: 'OK', onClick: () => { } },
       })
       setTimeout(() => setCopied(false), 2000)
     } catch (error) {
@@ -80,7 +80,7 @@ function MeetingHeader({
 
       if (response.ok) {
         toast('✅ Meeting Deleted', {
-          action: { label: 'OK', onClick: () => {} },
+          action: { label: 'OK', onClick: () => { } },
         })
         router.push('/home')
       }
@@ -106,7 +106,7 @@ function MeetingHeader({
           </div>
         ) : isOwner ? (
           <div className="flex items-center gap-2.5 flex-wrap">
-            <button
+            {/* <button
               onClick={handlePostToSlack}
               disabled={isPosting || !meetingId}
               type="button"
@@ -114,7 +114,7 @@ function MeetingHeader({
             >
               <img src="/slack.png" alt="Slack" className="w-4 h-4" />
               <span>{isPosting ? 'Posting...' : 'Post to Slack'}</span>
-            </button>
+            </button> */}
 
             <button
               onClick={handleShare}

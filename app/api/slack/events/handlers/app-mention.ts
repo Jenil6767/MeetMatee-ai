@@ -3,27 +3,30 @@ import { isDuplicateEvent } from "../utils/deduplicate"
 
 export async function handleAppMention({ event, say, client }: any) {
     try {
+        console.log('[Slack Bot] Received app_mention event:', JSON.stringify(event))
         const eventId = `app_mention-${event.channel}-${event.user}`
         const eventTs = event.event_ts || event.ts
 
         if (isDuplicateEvent(eventId, eventTs)) {
+            console.log('[Slack Bot] Duplicate event ignored:', eventId)
             return
         }
 
         const authTest = await client.auth.test()
         if (event.user === authTest.user_id) {
+            console.log('[Slack Bot] Ignoring self-mention from bot')
             return
         }
 
         const slackUserId = event.user
-
         if (!slackUserId) {
+            console.warn('[Slack Bot] Missing slackUserId in event')
             return
         }
 
         const text = event.text || ''
-
         const cleanText = text.replace(/<@[^>]+>/g, '').trim()
+        console.log('[Slack Bot] Cleaned prompt text:', cleanText)
 
         if (!cleanText) {
             await say("👋 Hi! Ask me anything about your meetings. For example:\n· What were the key decisions in yesterday's meeting?\n· Summarize yesterday's meeting action items\n· Who attended the product planning session?")
@@ -32,9 +35,10 @@ export async function handleAppMention({ event, say, client }: any) {
 
         const userInfo = await client.users.info({ user: slackUserId })
         const userEmail = userInfo.user?.profile?.email
+        console.log('[Slack Bot] User email from Slack profile:', userEmail)
 
         if (!userEmail) {
-            await say("Sorry, I cant access ur email. Please make sure your slack email is visible on your profile settings.")
+            await say("Sorry, I can't access your email. Please make sure your Slack email is visible in your profile settings.")
             return
         }
 
@@ -45,6 +49,7 @@ export async function handleAppMention({ event, say, client }: any) {
         })
 
         if (!user) {
+            console.warn('[Slack Bot] No user found with email:', userEmail)
             await say({
                 text: "Account not found",
                 blocks: [
@@ -52,7 +57,7 @@ export async function handleAppMention({ event, say, client }: any) {
                         type: "section",
                         text: {
                             type: "mrkdwn",
-                            text: `👋 Hi! I coant find an accoutn with email *${userEmail}*.\n\nPlease sign up first, then you can chat with me here!`
+                            text: `👋 Hi! I couldn't find a MeetMatee account with email *${userEmail}*.\n\nPlease sign up first at MeetMatee, then you can chat with me here!`
                         }
                     },
                     {
@@ -78,9 +83,12 @@ export async function handleAppMention({ event, say, client }: any) {
                 slackConnected: true
             }
         })
+
         await say("🤖 Searching through your meetings...")
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/rag/chat-all`, {
+        const ragUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/rag/chat-all`
+        console.log('[Slack Bot] Querying RAG API at:', ragUrl)
+        const response = await fetch(ragUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -92,13 +100,14 @@ export async function handleAppMention({ event, say, client }: any) {
         })
 
         if (!response.ok) {
+            const errText = await response.text()
+            console.error('[Slack Bot] RAG API failed:', response.status, errText)
             throw new Error(`RAG API failed: ${response.status}`)
         }
 
         const data = await response.json()
 
         if (data.answer) {
-
             const answer = data.answer
 
             await say({
@@ -124,10 +133,10 @@ export async function handleAppMention({ event, say, client }: any) {
                 ]
             })
         } else {
-            await say('sorry, i encountered an error searching through your meetings')
+            await say('Sorry, I encountered an error searching through your meetings.')
         }
     } catch (error) {
-        console.error('app mention handler error:', error)
-        await say('sory, something went wrong. please try again')
+        console.error('[Slack Bot] App mention handler error:', error)
+        await say('Sorry, something went wrong. Please try again.')
     }
 }

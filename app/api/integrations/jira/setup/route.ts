@@ -34,9 +34,11 @@ export async function GET() {
 
     try {
         const validToken = await getValidToken(integration)
+        // email is stored in refreshToken field for API token auth
+        const email = integration.refreshToken || null
         const jira = new JiraAPI()
 
-        const projects = await jira.getProjects(validToken, integration.workspaceId)
+        const projects = await jira.getProjects(validToken, integration.workspaceId, email)
         return NextResponse.json(
             {
                 projects: projects.values || []
@@ -44,7 +46,7 @@ export async function GET() {
         )
     } catch (error) {
         console.error('error fetching jira projects:', error)
-        return NextResponse.json({ error: 'failed to fetch proejcts' }, { status: 500 })
+        return NextResponse.json({ error: 'failed to fetch projects' }, { status: 500 })
     }
 }
 
@@ -72,6 +74,8 @@ export async function POST(request: NextRequest) {
 
     try {
         const validToken = await getValidToken(integration)
+        // email is stored in refreshToken field for API token auth
+        const email = integration.refreshToken || null
 
         const jira = new JiraAPI()
 
@@ -87,21 +91,22 @@ export async function POST(request: NextRequest) {
                     validToken,
                     integration.workspaceId,
                     projectName,
-                    key)
+                    key,
+                    email)
                 finalProjectId = newProject.id
                 finalProjectName = projectName
                 finalProjectKey = newProject.key
             } catch (error) {
-                console.error('failed to create prohect:', error)
+                console.error('failed to create project:', error)
                 return NextResponse.json({
-                    error: 'failed to create project. you may not have admin permisisons'
+                    error: 'failed to create project. you may not have admin permissions'
                 }, { status: 403 })
             }
         }
 
         else if (projectId) {
-            const projects = await jira.getProjects(validToken, integration.workspaceId)
-            const selectedProject = projects.values.find(p => p.id === projectId)
+            const projects = await jira.getProjects(validToken, integration.workspaceId, email)
+            const selectedProject = projects.values.find((p: any) => p.id === projectId)
 
             if (!selectedProject) {
                 return NextResponse.json({ error: 'project not found' }, { status: 404 })

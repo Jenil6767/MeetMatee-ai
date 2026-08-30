@@ -87,7 +87,30 @@ export async function GET(request: NextRequest) {
             console.error('failed to link user during oauth:', error)
         }
 
-        const returnTo = state?.startsWith('return=') ? state.split('return=')[1] : null
+        // Parse state: supports both old format "return=integrations"
+        // and new pipe-separated format "return=integrations|userId=user_xxx"
+        const stateParts = (state || '').split('|')
+        const returnPart = stateParts.find(p => p.startsWith('return='))
+        const userIdPart = stateParts.find(p => p.startsWith('userId='))
+        const returnTo = returnPart ? returnPart.split('return=')[1] : null
+        const clerkUserId = userIdPart ? userIdPart.split('userId=')[1] : null
+
+        // Primary: link by clerkId (reliable — no email scope dependency)
+        if (clerkUserId) {
+            try {
+                await prisma.user.updateMany({
+                    where: { clerkId: clerkUserId },
+                    data: {
+                        slackUserId: tokenData.authed_user.id,
+                        slackTeamId: tokenData.team.id,
+                        slackConnected: true
+                    }
+                })
+                console.log('[Slack OAuth] Linked workspace to user via clerkId:', clerkUserId)
+            } catch (e) {
+                console.error('[Slack OAuth] Failed to link by clerkId:', e)
+            }
+        }
 
         if (returnTo === 'integrations') {
             return NextResponse.redirect(`${baseUrl}/integrations?setup=slack`)

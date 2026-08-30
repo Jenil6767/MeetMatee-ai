@@ -57,6 +57,8 @@ export function useIntegrations() {
     const [setupMode, setSetupMode] = useState<string | null>(null)
     const [setupData, setSetupData] = useState<any>(null)
     const [setupLoading, setSetupLoading] = useState(false)
+    const [jiraConnectMode, setJiraConnectMode] = useState(false)
+    const [jiraConnectError, setJiraConnectError] = useState<string | null>(null)
 
     useEffect(() => {
         if (userId) {
@@ -119,8 +121,37 @@ export function useIntegrations() {
             window.location.href = '/api/slack/install?return=integrations'
         } else if (platform === 'google-calendar') {
             window.location.href = '/api/auth/google/direct-connect'
+        } else if (platform === 'jira') {
+            setJiraConnectMode(true)
+            setJiraConnectError(null)
         } else {
             window.location.href = `/api/integrations/${platform}/auth`
+        }
+    }
+
+    const handleJiraConnect = async (email: string, apiToken: string, siteUrl: string) => {
+        setSetupLoading(true)
+        setJiraConnectError(null)
+        try {
+            const res = await fetch('/api/integrations/jira/connect', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, apiToken, siteUrl })
+            })
+            const data = await res.json()
+            if (!res.ok) {
+                setJiraConnectError(data.error || 'Failed to connect Jira.')
+                return
+            }
+            // Success — close modal, open project setup
+            setJiraConnectMode(false)
+            fetchIntegrations()
+            setSetupMode('jira')
+            fetchSetupData('jira')
+        } catch (err) {
+            setJiraConnectError('Network error. Please try again.')
+        } finally {
+            setSetupLoading(false)
         }
     }
 
@@ -179,6 +210,11 @@ export function useIntegrations() {
         fetchSetupData,
         handleConnect,
         handleDisconnect,
-        handleSetupSubmit
+        handleSetupSubmit,
+        jiraConnectMode,
+        setJiraConnectMode,
+        jiraConnectError,
+        setJiraConnectError,
+        handleJiraConnect
     }
 }
