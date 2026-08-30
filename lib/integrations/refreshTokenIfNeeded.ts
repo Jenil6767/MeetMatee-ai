@@ -6,7 +6,12 @@ export async function refreshTokenIfNeeded(integration: UserIntegration) {
     const now = new Date()
     const expiresAt = integration.expiresAt
 
-    if (!expiresAt || now >= new Date(expiresAt.getTime() - 5 * 60 * 1000)) {
+    // API tokens (e.g. Jira API Token) do not have an expiration and don't need refreshing
+    if (!expiresAt) {
+        return integration
+    }
+
+    if (now >= new Date(expiresAt.getTime() - 5 * 60 * 1000)) {
         switch (integration.platform) {
             case 'jira':
                 return await refreshJiraToken(integration)
