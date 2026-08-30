@@ -274,11 +274,16 @@ export async function chatWithAllMeetings(
 
     const questionEmbedding = await createEmbedding(question)
 
+    const filter = userIds.length === 1
+        ? { userId: userIds[0] }
+        : { userId: { $in: userIds } }
+
     const results = await searchVectors(
         questionEmbedding,
-        { userId: primaryUserId },
+        filter,
         8
     )
+
 
     const context = results
         .map(result => {

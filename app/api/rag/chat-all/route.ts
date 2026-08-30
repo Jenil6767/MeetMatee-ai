@@ -19,28 +19,40 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json({ error: 'not logged in' }, { status: 401 })
             }
 
-            const user = await prisma.user.findUnique({
-                where: { clerkId: clerkUserId },
+            const user = await prisma.user.findFirst({
+                where: {
+                    OR: [
+                        { clerkId: clerkUserId },
+                        { id: clerkUserId }
+                    ]
+                },
                 select: { id: true, clerkId: true }
             })
 
             if (user) {
-                targetUserIds = Array.from(new Set([user.id, user.clerkId].filter(Boolean) as string[]))
+                targetUserIds = Array.from(new Set([user.id, user.clerkId, clerkUserId].filter(Boolean) as string[]))
             } else {
                 targetUserIds = [clerkUserId]
             }
         } else {
-            const user = await prisma.user.findUnique({
-                where: { id: slackUserId },
+            const user = await prisma.user.findFirst({
+                where: {
+                    OR: [
+                        { id: slackUserId },
+                        { clerkId: slackUserId },
+                        { slackUserId: slackUserId }
+                    ]
+                },
                 select: { id: true, clerkId: true }
             })
 
-            if (!user) {
-                return NextResponse.json({ error: 'user not found' }, { status: 404 })
+            if (user) {
+                targetUserIds = Array.from(new Set([user.id, user.clerkId, slackUserId].filter(Boolean) as string[]))
+            } else {
+                targetUserIds = [slackUserId]
             }
-
-            targetUserIds = Array.from(new Set([user.id, user.clerkId].filter(Boolean) as string[]))
         }
+
 
         const response = await chatWithAllMeetings(targetUserIds, question)
 
