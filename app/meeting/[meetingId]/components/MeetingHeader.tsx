@@ -106,7 +106,7 @@ function MeetingHeader({
           </div>
         ) : isOwner ? (
           <div className="flex items-center gap-2.5 flex-wrap">
-            {/* <button
+            <button
               onClick={handlePostToSlack}
               disabled={isPosting || !meetingId}
               type="button"
@@ -114,7 +114,8 @@ function MeetingHeader({
             >
               <img src="/slack.png" alt="Slack" className="w-4 h-4" />
               <span>{isPosting ? 'Posting...' : 'Post to Slack'}</span>
-            </button> */}
+            </button>
+
 
             <button
               onClick={handleShare}

@@ -37,16 +37,18 @@ export async function handleAppMention({ event, say, client }: any) {
         const userEmail = userInfo.user?.profile?.email
         console.log('[Slack Bot] User email from Slack profile:', userEmail)
 
-        if (!userEmail) {
-            await say("Sorry, I can't access your email. Please make sure your Slack email is visible in your profile settings.")
-            return
-        }
-
-        const user = await prisma.user.findFirst({
-            where: {
-                email: userEmail
-            }
+        // Look up by slackUserId first (most reliable — works even if emails differ)
+        // Then fall back to email matching
+        let user = await prisma.user.findFirst({
+            where: { slackUserId: slackUserId }
         })
+
+        if (!user && userEmail) {
+            console.log('[Slack Bot] slackUserId not found, trying email lookup:', userEmail)
+            user = await prisma.user.findFirst({
+                where: { email: userEmail }
+            })
+        }
 
         if (!user) {
             console.warn('[Slack Bot] No user found with email:', userEmail)
