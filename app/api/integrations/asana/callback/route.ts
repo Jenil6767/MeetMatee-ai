@@ -34,6 +34,8 @@ export async function GET(request: NextRequest) {
         }
 
         const tokenData = await tokenResponse.json()
+        const expiresInSeconds = tokenData.expires_in || 3600
+        const expiresAt = new Date(Date.now() + expiresInSeconds * 1000)
 
         await prisma.userIntegration.upsert({
             where: {
@@ -45,6 +47,7 @@ export async function GET(request: NextRequest) {
             update: {
                 accessToken: tokenData.access_token,
                 refreshToken: tokenData.refresh_token,
+                expiresAt,
                 updatedAt: new Date()
             },
             create: {
@@ -52,8 +55,10 @@ export async function GET(request: NextRequest) {
                 platform: 'asana',
                 accessToken: tokenData.access_token,
                 refreshToken: tokenData.refresh_token,
+                expiresAt,
             }
         })
+
 
         return NextResponse.redirect(new URL('/integrations?success=asana_connected&setup=asana', process.env.NEXT_PUBLIC_APP_URL))
     } catch (error) {

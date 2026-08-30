@@ -81,7 +81,9 @@ export class AsanaAPI {
             }
         )
         if (!response.ok) {
-            throw new Error('Failed to create task')
+            const errorText = await response.text()
+            console.error('Failed to create Asana task:', response.status, errorText)
+            throw new Error(`Failed to create task: ${response.status} - ${errorText}`)
         }
 
         return response.json()

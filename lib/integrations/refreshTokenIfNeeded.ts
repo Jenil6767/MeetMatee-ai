@@ -6,19 +6,17 @@ export async function refreshTokenIfNeeded(integration: UserIntegration) {
     const now = new Date()
     const expiresAt = integration.expiresAt
 
-    // API tokens (e.g. Jira API Token) do not have an expiration and don't need refreshing
-    if (!expiresAt) {
-        return integration
+    // Asana uses OAuth 2.0 with hourly expiring tokens
+    if (integration.platform === 'asana' && integration.refreshToken) {
+        if (!expiresAt || now >= new Date(expiresAt.getTime() - 5 * 60 * 1000)) {
+            return await refreshAsanaToken(integration)
+        }
     }
 
-    if (now >= new Date(expiresAt.getTime() - 5 * 60 * 1000)) {
-        switch (integration.platform) {
-            case 'jira':
-                return await refreshJiraToken(integration)
-            case 'asana':
-                return await refreshAsanaToken(integration)
-            default:
-                return integration
+    // Jira only refreshes if it has an OAuth expiry (legacy OAuth); API token auth has no expiry
+    if (integration.platform === 'jira' && integration.expiresAt) {
+        if (now >= new Date(integration.expiresAt.getTime() - 5 * 60 * 1000)) {
+            return await refreshJiraToken(integration)
         }
     }
 
