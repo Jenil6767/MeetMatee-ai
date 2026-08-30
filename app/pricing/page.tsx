@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useUser } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Check, Loader2 } from 'lucide-react'
 import { useUsage } from '@/app/contexts/UsageContext'
@@ -59,13 +60,17 @@ const plans = [
 export default function Pricing() {
   const { user } = useUser()
   const { usage } = useUsage()
+  const router = useRouter()
   const [loading, setLoading] = useState<string | null>(null)
 
-  const handleSubscribe = async (priceId: string, planName: string) => {
+  const handlePlanAction = async (priceId: string, planName: string) => {
+    // If not logged in, redirect to sign in page
     if (!user) {
+      router.push('/sign-in')
       return
     }
 
+    // If logged in, proceed to Stripe Checkout
     setLoading(priceId)
 
     try {
@@ -117,7 +122,7 @@ export default function Pricing() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch max-w-xl mx-auto lg:max-w-none">
         {plans.map((plan, index) => {
           const isLoading = loading === plan.priceId
-          const isCurrentPlan = usage?.currentPlan === plan.id && usage?.subscriptionStatus === 'active'
+          const isCurrentPlan = Boolean(user && usage?.currentPlan === plan.id && usage?.subscriptionStatus === 'active')
 
           return (
             <motion.div
@@ -170,7 +175,7 @@ export default function Pricing() {
 
               {/* Action Button */}
               <button
-                onClick={() => handleSubscribe(plan.priceId, plan.id)}
+                onClick={() => handlePlanAction(plan.priceId, plan.id)}
                 disabled={isLoading || isCurrentPlan}
                 className={`w-full h-[52px] rounded-[16px] font-semibold text-[16px] transition-all duration-300 flex items-center justify-center ${
                   isCurrentPlan
@@ -185,10 +190,12 @@ export default function Pricing() {
                     <Loader2 className="w-5 h-5 mr-2 animate-spin text-[#FF5A0A]" />
                     Processing...
                   </>
+                ) : !user ? (
+                  'Start Free Trial'
                 ) : isCurrentPlan ? (
                   'Current Plan'
                 ) : (
-                  `Subscribe to ${plan.name}`
+                  `Upgrade to ${plan.name}`
                 )}
               </button>
             </motion.div>
@@ -198,3 +205,4 @@ export default function Pricing() {
     </section>
   )
 }
+
