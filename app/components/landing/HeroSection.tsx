@@ -10,6 +10,14 @@ export default function HeroSection() {
   const { isSignedIn } = useUser()
   const [showDemoModal, setShowDemoModal] = useState(false)
 
+  const handleWatchDemo = () => {
+    if (typeof window !== 'undefined' && (window as any).Supademo?.open) {
+      ;(window as any).Supademo.open('cmtfvxago0001x10jnlgq637j')
+    } else {
+      setShowDemoModal(true)
+    }
+  }
+
   return (
     <section className="pt-[60px] md:pt-[80px] pb-12 md:pb-16 px-5 sm:px-8 max-w-[1280px] mx-auto overflow-hidden">
       <div className="max-w-[850px] mx-auto text-center flex flex-col items-center">
@@ -78,7 +86,7 @@ export default function HeroSection() {
             )}
 
             <button
-              onClick={() => setShowDemoModal(true)}
+              onClick={handleWatchDemo}
               type="button"
               className="w-full sm:w-auto inline-flex items-center justify-center bg-white hover:bg-[#fafafa] text-[#0D0D0D] font-semibold text-[15px] sm:text-[16px] h-[52px] px-6 rounded-[16px] border border-black/[0.12] shadow-xs hover:-translate-y-[3px] transition-all duration-300 group cursor-pointer"
             >
@@ -88,6 +96,7 @@ export default function HeroSection() {
               <span>Watch Demo</span>
             </button>
           </motion.div>
+
 
           {/* Trust Indicators */}
           <motion.div

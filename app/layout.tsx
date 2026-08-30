@@ -69,6 +69,7 @@ export default function RootLayout({
           <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
           <link rel="shortcut icon" href="/icon.png" type="image/png" />
           <link rel="apple-touch-icon" href="/apple-icon.png" />
+          <script src="https://script.supademo.com/supademo.js" async></script>
         </head>
         <body
           className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${bricolageGrotesque.variable} antialiased bg-background text-foreground`}
