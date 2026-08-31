@@ -173,7 +173,7 @@ export default function HeroSection() {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>c:\Users\ADMIN\Pictures\Screenshots\Screenshot 2026-08-27 142551.png c:\Users\ADMIN\Pictures\Screenshots\Screenshot 2026-08-27 142525.png
+      </AnimatePresence>
     </section>
   )
 }
