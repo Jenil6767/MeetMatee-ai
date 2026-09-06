@@ -1,16 +1,43 @@
 {
   "privacy-policy": {
     "title": "Privacy Policy",
-    "lastUpdated": "15th June 2026",
-    "intro": "MeetMatee (\"we\", \"us\", \"our\") collects and uses personal information to operate the platform, generate AI meeting services, enhance user experience, and fulfil service requests. We comply with applicable privacy laws, including the Australian Privacy Principles and GDPR where relevant.",
+    "lastUpdated": "6th September 2026",
+    "intro": "MeetMatee (\"we\", \"us\", \"our\") collects and uses personal information to operate the platform, generate AI meeting services, enhance user experience, and fulfil service requests. We comply with applicable privacy laws, including the Australian Privacy Principles, GDPR, and the Google API Services User Data Policy.",
     "sections": [
+      {
+        "calloutBox": {
+          "title": "Google API Services User Data Policy & Limited Use Disclosure",
+          "description": "MeetMatee's use and transfer to any other app of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements (https://developers.google.com/terms/api-services-user-data-policy)."
+        }
+      },
       {
         "title": "Data We Collect",
         "items": [
-          "Identity & Contact Information: Name, email address, organisation (when provided).",
-          "Content Inputs: Configuration parameters, prompt inputs, business profile info, email addresses, and other content required to configure meeting profiles.",
+          "Identity & Contact Information: Name, email address, profile image, and organisation details (when provided).",
+          "Google User Data: When you connect your Google account, we access calendar events, event titles, scheduled dates and times, attendee lists, event descriptions, and virtual conferencing links (such as Google Meet or Zoom) via Google Calendar APIs.",
+          "Content Inputs: Meeting preferences, prompt inputs, business profile info, email addresses, and parameters required to configure meeting assistants.",
           "Usage Data: IP address, device/browser details, session logs, call transcript files, activity data, and interaction history within the product.",
           "Cookies & Tracking Technologies: Used for analytics, authentication, and improving performance. See our Cookie Policy for details."
+        ]
+      },
+      {
+        "title": "Google Calendar Data Access & Usage",
+        "description": "MeetMatee integrates with Google OAuth APIs (specifically https://www.googleapis.com/auth/calendar.readonly) to provide our automated meeting assistant service. Here is specifically how Google user data is handled:",
+        "items": [
+          "What We Access: We access calendar metadata including event titles, scheduled meeting start and end times, attendee email addresses, and meeting URLs (e.g., Google Meet, Zoom, Microsoft Teams links).",
+          "Why We Access It: We access this data solely to detect upcoming scheduled meetings so that our AI meeting bot can join your designated meetings on time and generate transcripts, summaries, and action items for you.",
+          "No AI/ML Model Training: We explicitly DO NOT use Google user data (including Google Calendar data, meeting titles, or transcripts) to train, retrain, or improve generalized Artificial Intelligence (AI) or Machine Learning (ML) models.",
+          "No Selling or Advertising: We do not sell, license, or rent Google user data to third parties, data brokers, or advertisers under any circumstances. Google user data is never used for serving advertisements, including retargeting or personalized ads.",
+          "Human Access Restrictions: MeetMatee personnel and contractors are strictly prohibited from viewing or accessing your Google Calendar data, unless: (1) you provide explicit written consent for troubleshooting; (2) it is required for security or abuse investigations; or (3) required by applicable law.",
+          "Data Storage & Security: All tokens and meeting data received through Google APIs are encrypted both in transit (TLS 1.3) and at rest (AES-256). Data is retained only as long as your account remains active or until you request its deletion."
+        ]
+      },
+      {
+        "title": "Managing & Revoking Google Access",
+        "paragraphs": [
+          "You can disconnect your Google Calendar integration at any time directly within your MeetMatee account settings.",
+          "You may also revoke MeetMatee's access to your Google account at any time through the Google Account Permissions dashboard at https://myaccount.google.com/permissions.",
+          "Upon revoking access or requesting account deletion, all stored OAuth tokens and associated calendar cache data will be permanently purged from our systems. To request manual data deletion, contact us at meetmateesaas@gmail.com."
         ]
       },
       {
@@ -39,10 +66,11 @@
         "title": "Sharing & Disclosure",
         "paragraphs": [
           "We do not sell personal data.",
-          "We may share data with:"
+          "We do not share or transfer Google user data to third parties, except where strictly required to provide user-facing features or comply with legal obligations.",
+          "We may share general personal data with:"
         ],
         "items": [
-          "Service Providers: telephony servers, database hosting, cloud hosting, analytics, billing integrations (Stripe), email dispatchers  strictly under contractual obligations",
+          "Service Providers: telephony servers, database hosting, cloud hosting, analytics, billing integrations (Stripe), email dispatchers strictly under contractual obligations",
           "Legal Authorities: where required by law",
           "Business Transfers: if MeetMatee undergoes a merger, acquisition, or similar event (with prior notice where required)"
         ]
