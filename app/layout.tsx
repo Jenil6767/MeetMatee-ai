@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     apple: "/apple-icon.png",
   },
   verification: {
-    google: "p082gXCmdyd3WN2eau9QlJzF-w5ZfkAgd22jrE8aUwM",
+    google: "hlZPTakWkIsvmOhOuHiIKCXKJ715uKYlE3LlUu35Qx0",
   },
 };
 
@@ -68,7 +68,7 @@ export default function RootLayout({
     >
       <html lang="en" suppressHydrationWarning className="dark">
         <head>
-          <meta name="google-site-verification" content="p082gXCmdyd3WN2eau9QlJzF-w5ZfkAgd22jrE8aUwM" />
+          <meta name="google-site-verification" content="hlZPTakWkIsvmOhOuHiIKCXKJ715uKYlE3LlUu35Qx0" />
           <link rel="icon" href="/icon.png" type="image/png" />
           <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
           <link rel="shortcut icon" href="/icon.png" type="image/png" />
