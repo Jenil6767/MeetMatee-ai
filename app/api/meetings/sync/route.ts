@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { getOrCreateUser } from "@/lib/user";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -11,9 +12,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "not authenticated" }, { status: 401 });
         }
 
-        const user = await prisma.user.findUnique({
-            where: { clerkId: userId }
-        });
+        const user = await getOrCreateUser(userId);
 
         if (!user || !user.calendarConnected || !user.googleAccessToken) {
             return NextResponse.json({ error: "calendar not connected" }, { status: 400 });

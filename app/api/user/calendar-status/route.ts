@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { getOrCreateUser } from "@/lib/user";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
@@ -9,18 +9,10 @@ export async function GET() {
             return NextResponse.json({ connected: false })
         }
 
-        const user = await prisma.user.findUnique({
-            where: {
-                clerkId: userId
-            },
-            select: {
-                calendarConnected: true,
-                googleAccessToken: true
-            }
-        })
+        const user = await getOrCreateUser(userId)
 
         return NextResponse.json({
-            connected: user?.calendarConnected && !!user.googleAccessToken
+            connected: !!(user?.calendarConnected && user.googleAccessToken)
         })
     } catch (error) {
         return NextResponse.json({ connected: false })

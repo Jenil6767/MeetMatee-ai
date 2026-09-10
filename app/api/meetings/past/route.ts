@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { getOrCreateUser } from "@/lib/user";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,9 +18,7 @@ export async function GET(request: NextRequest) {
         const limit = Math.max(1, parseInt(searchParams.get('limit') || '5', 10))
         const skip = (page - 1) * limit
 
-        const user = await prisma.user.findUnique({
-            where: { clerkId: userId }
-        })
+        const user = await getOrCreateUser(userId)
 
         if (!user) {
             return NextResponse.json({ error: "user not found" }, { status: 404 })
