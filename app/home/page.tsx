@@ -35,7 +35,8 @@ function Home() {
     searchQuery,
     handleSearch,
     clearSearch,
-    syncCalendar
+    syncCalendar,
+    handleJoinMeeting
   } = useMeetings()
 
   const router = useRouter()
@@ -178,6 +179,7 @@ function Home() {
               onToggleBot={toggleBot}
               onConnectCalendar={directOAuth}
               onSyncCalendar={syncCalendar}
+              onJoinMeeting={handleJoinMeeting}
             />
           </div>
         </div>

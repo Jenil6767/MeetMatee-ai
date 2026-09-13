@@ -45,6 +45,18 @@ export async function POST(request: NextRequest) {
 
         let stripeCustomerId = dbUser?.stripeCustomerId
 
+        if (stripeCustomerId) {
+            try {
+                const existing = await stripe.customers.retrieve(stripeCustomerId)
+                if (existing.deleted) {
+                    stripeCustomerId = null
+                }
+            } catch (err) {
+                console.warn(`Customer ${stripeCustomerId} not found in current Stripe mode (switched test/live). Re-creating...`)
+                stripeCustomerId = null
+            }
+        }
+
         if (!stripeCustomerId) {
             const customer = await stripe.customers.create({
                 email: user.primaryEmailAddress?.emailAddress!,
@@ -69,7 +81,6 @@ export async function POST(request: NextRequest) {
 
         const session = await stripe.checkout.sessions.create({
             customer: stripeCustomerId,
-            payment_method_types: ['card'],
             line_items: [
                 {
                     price: priceId,
@@ -93,8 +104,10 @@ export async function POST(request: NextRequest) {
             }
         })
         return NextResponse.json({ url: session.url })
-    } catch (error) {
+    } catch (error: any) {
         console.error('stripe checkout error:', error)
-        return NextResponse.json({ error: 'failed to create checkout session' }, { status: 500 })
+        return NextResponse.json({ 
+            error: error?.message || 'failed to create checkout session' 
+        }, { status: 500 })
     }
 }

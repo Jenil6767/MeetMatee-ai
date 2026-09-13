@@ -17,6 +17,7 @@ interface UpcomingMeetingsProps {
   onToggleBot: (eventId: string) => void
   onConnectCalendar: () => void
   onSyncCalendar?: () => void
+  onJoinMeeting?: (eventId: string) => void
 }
 
 function UpcomingMeetings({
@@ -30,6 +31,7 @@ function UpcomingMeetings({
   onToggleBot,
   onConnectCalendar,
   onSyncCalendar,
+  onJoinMeeting,
 }: UpcomingMeetingsProps) {
   return (
     <div className="space-y-6">
@@ -167,6 +169,7 @@ function UpcomingMeetings({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block"
+                    onClick={() => onJoinMeeting?.(event.id)}
                   >
                     <button className="w-full h-[34px] bg-[#FF5A0A] hover:bg-[#E94E08] text-white text-xs font-semibold rounded-[10px] transition-all shadow-xs cursor-pointer">
                       Join Meeting

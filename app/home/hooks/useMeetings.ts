@@ -72,7 +72,7 @@ export function useMeetings() {
 
     const [manualRefreshing, setManualRefreshing] = useState(false)
 
-    // SWR Hook for upcoming meetings: silent background polling (no aggressive requests on tab switches)
+    // SWR Hook for upcoming meetings: background polling + auto-sync when refocusing tab
     const {
         data: upcomingData,
         error: swrError,
@@ -83,16 +83,51 @@ export function useMeetings() {
         userId ? '/api/meetings/upcoming' : null,
         upcomingFetcher,
         {
-            revalidateOnFocus: false,    // Do NOT fire API requests every time the user switches tabs
+            revalidateOnFocus: true,     // Auto-sync when switching back to tab from Google Meet
             revalidateOnReconnect: true, // Auto-sync if internet connection drops & recovers
-            refreshInterval: 60000,      // Silent background poll every 60 seconds (max 60s for new/canceled events)
-            dedupingInterval: 10000,     // Deduplicate requests within 10 seconds
+            refreshInterval: 15000,      // Silent background poll every 15 seconds
+            dedupingInterval: 4000,      // Deduplicate requests within 4 seconds
             shouldRetryOnError: true,
             errorRetryCount: 3,
         }
     )
 
-    const upcomingEvents = upcomingData?.events ?? []
+    // Clock ticker updating every 5 seconds to dynamically remove meetings whose start time has arrived
+    const [currentTime, setCurrentTime] = useState(() => Date.now())
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(Date.now())
+        }, 5000)
+        return () => clearInterval(timer)
+    }, [])
+
+    // Track meetings joined in current session to remove them instantly from UI
+    const [joinedMeetingIds, setJoinedMeetingIds] = useState<Set<string>>(new Set())
+
+    const upcomingEvents = (upcomingData?.events ?? []).filter(event => {
+        if (joinedMeetingIds.has(event.id)) {
+            return false
+        }
+        const start = event.start?.dateTime || event.start?.date
+        if (!start) return true
+        // Automatically hide meetings whose start time has arrived or passed (meeting in progress/done)
+        return new Date(start).getTime() > currentTime
+    })
+
+    const handleJoinMeeting = (eventId: string) => {
+        setJoinedMeetingIds(prev => new Set(prev).add(eventId))
+        mutateUpcoming(
+            current => {
+                if (!current) return current
+                return {
+                    ...current,
+                    events: current.events.filter(e => e.id !== eventId)
+                }
+            },
+            { revalidate: false }
+        )
+    }
     const connected = upcomingData?.connected ?? false
     const error = swrError
         ? (swrError.message || 'Failed to fetch calendar events. Please try again.')
@@ -320,7 +355,8 @@ export function useMeetings() {
         searchQuery,
         handleSearch,
         clearSearch,
-        syncCalendar
+        syncCalendar,
+        handleJoinMeeting
     }
 
 }

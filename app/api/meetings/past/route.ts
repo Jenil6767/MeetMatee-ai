@@ -28,7 +28,17 @@ export async function GET(request: NextRequest) {
 
         const where: any = {
             userId: user.id,
-            meetingEnded: true
+            meetingEnded: true,
+            NOT: [
+                {
+                    summary: 'No transcript was available for this meeting.'
+                },
+                {
+                    processed: true,
+                    transcriptReady: false,
+                    recordingUrl: null
+                }
+            ]
         }
 
         if (search) {

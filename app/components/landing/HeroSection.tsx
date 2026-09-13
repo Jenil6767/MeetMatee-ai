@@ -119,18 +119,23 @@ export default function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Hero Section Image Showcase (/hero image.png) */}
+        {/* Hero Section Interactive Supademo Showcase */}
         <motion.div
           initial={{ opacity: 0, y: 35 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: 'easeOut' }}
-          className="w-full max-w-[1150px] mx-auto"
+          className="w-full max-w-[1150px] mx-auto rounded-[20px] sm:rounded-[28px] md:rounded-[36px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-black/[0.06] bg-[#0F0F10] transition-transform duration-700 hover:scale-[1.005]"
         >
-          <img
-            src="/hero image.png"
-            alt="MeetMatee Platform Preview"
-            className="w-full h-auto rounded-[20px] sm:rounded-[28px] md:rounded-[36px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-black/[0.06] object-contain transition-transform duration-700 hover:scale-[1.005]"
-          />
+          <div className="relative w-full aspect-[1536/1024]">
+            <iframe
+              src="https://app.supademo.com/embed/cmtfvxago0001x10jnlgq637j?embed_v=2"
+              loading="lazy"
+              title="MeetMatee Interactive Demo"
+              allow="clipboard-write"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full border-0"
+            />
+          </div>
         </motion.div>
       </div>
 

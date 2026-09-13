@@ -78,18 +78,32 @@ export async function GET(request: NextRequest) {
                     }
                 }
 
-                // If no transcript from either source, mark as processed with error
+                // If no transcript from either source, clean up empty unattended meeting
                 if (!transcriptText || transcriptText.trim().length === 0) {
-                    console.log(`[Cron] No transcript available for ${meeting.id}`)
-                    await prisma.meeting.update({
-                        where: { id: meeting.id },
-                        data: {
-                            processed: true,
-                            processedAt: new Date(),
-                            summary: 'No transcript was available for this meeting.',
-                            actionItems: []
-                        }
-                    })
+                    console.log(`[Cron] No transcript available for ${meeting.id}. Removing empty meeting.`)
+                    try {
+                        await prisma.meeting.delete({
+                            where: { id: meeting.id }
+                        })
+                        await prisma.user.update({
+                            where: { id: meeting.userId },
+                            data: {
+                                meetingsThisMonth: {
+                                    decrement: 1
+                                }
+                            }
+                        }).catch(() => {})
+                    } catch (delErr) {
+                        await prisma.meeting.update({
+                            where: { id: meeting.id },
+                            data: {
+                                processed: true,
+                                processedAt: new Date(),
+                                summary: 'No transcript was available for this meeting.',
+                                actionItems: []
+                            }
+                        })
+                    }
                     continue
                 }
 

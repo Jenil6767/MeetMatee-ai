@@ -166,17 +166,33 @@ export async function POST(request: NextRequest) {
                     })
                 }
             } else {
-                // No transcript from either source — mark as processed so UI doesn't spin forever
-                console.warn(`[Webhook] No transcript available for meeting ${meeting.id} from Whisper or Meeting BaaS`)
-                await prisma.meeting.update({
-                    where: { id: meeting.id },
-                    data: {
-                        processed: true,
-                        processedAt: new Date(),
-                        summary: 'No transcript was available for this meeting.',
-                        actionItems: []
-                    }
-                })
+                // No transcript from either source — owner did not join or no conversation took place
+                console.warn(`[Webhook] No conversation or speech recorded for meeting ${meeting.id}. Removing empty meeting.`)
+                try {
+                    await prisma.meeting.delete({
+                        where: { id: meeting.id }
+                    })
+                    // Restore meeting quota if incremented earlier
+                    await prisma.user.update({
+                        where: { id: meeting.userId },
+                        data: {
+                            meetingsThisMonth: {
+                                decrement: 1
+                            }
+                        }
+                    }).catch(() => {})
+                } catch (delErr) {
+                    console.error(`[Webhook] Failed to delete empty meeting ${meeting.id}:`, delErr)
+                    await prisma.meeting.update({
+                        where: { id: meeting.id },
+                        data: {
+                            processed: true,
+                            processedAt: new Date(),
+                            summary: 'No transcript was available for this meeting.',
+                            actionItems: []
+                        }
+                    })
+                }
             }
 
             return NextResponse.json({
