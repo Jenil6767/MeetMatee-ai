@@ -93,13 +93,13 @@ export default function HeroSection() {
             <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
               <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
             </div>
-            <span>Watch Demo</span>
+            <span>Get Started</span>
           </button>
         </motion.div>
 
 
         {/* Trust Indicators */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4, ease: 'easeOut' }}
@@ -117,25 +117,20 @@ export default function HeroSection() {
             <CheckCircle2 className="w-4 h-4 text-[#FF5A0A]" />
             <span>Free forever plan</span>
           </div>
-        </motion.div>
+        </motion.div> */}
 
-        {/* Hero Section Interactive Supademo Showcase */}
+        {/* Hero Section Image Showcase (/hero image.png) */}
         <motion.div
           initial={{ opacity: 0, y: 35 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: 'easeOut' }}
           className="w-full max-w-[1150px] mx-auto rounded-[20px] sm:rounded-[28px] md:rounded-[36px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-black/[0.06] bg-[#0F0F10] transition-transform duration-700 hover:scale-[1.005]"
         >
-          <div className="relative w-full aspect-[1536/1024]">
-            <iframe
-              src="https://app.supademo.com/embed/cmtfvxago0001x10jnlgq637j?embed_v=2"
-              loading="lazy"
-              title="MeetMatee Interactive Demo"
-              allow="clipboard-write"
-              allowFullScreen
-              className="absolute inset-0 w-full h-full border-0"
-            />
-          </div>
+          <img
+            src="/hero image.png"
+            alt="MeetMatee Platform Preview"
+            className="w-full h-auto object-contain"
+          />
         </motion.div>
       </div>
 
