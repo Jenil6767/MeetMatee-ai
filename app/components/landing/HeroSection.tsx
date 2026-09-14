@@ -81,11 +81,12 @@ export default function HeroSection() {
               <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
                 <ChevronsRight className="w-4 h-4" />
               </div>
-              <span>Start Free Trial</span>
+              <span>Get Started</span>
             </Link>
           )}
 
-          <button
+          {/* Video / Watch Demo button - commented out as of now, not removed */}
+          {/* <button
             onClick={handleWatchDemo}
             type="button"
             className="w-full sm:w-auto inline-flex items-center justify-center bg-white hover:bg-[#fafafa] text-[#0D0D0D] font-semibold text-[15px] sm:text-[16px] h-[52px] px-6 rounded-[16px] border border-black/[0.12] shadow-xs hover:-translate-y-[3px] transition-all duration-300 group cursor-pointer"
@@ -93,8 +94,8 @@ export default function HeroSection() {
             <div className="w-7 h-7 rounded-[8px] bg-[#FF5A0A] flex items-center justify-center mr-2.5 text-white shrink-0 group-hover:scale-105 transition-transform">
               <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
             </div>
-            <span>Get Started</span>
-          </button>
+            <span>Watch Demo</span>
+          </button> */}
         </motion.div>
 
 
