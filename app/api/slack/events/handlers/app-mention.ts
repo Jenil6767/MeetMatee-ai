@@ -88,7 +88,10 @@ export async function handleAppMention({ event, say, client }: any) {
 
         await say("🤖 Searching through your meetings...")
 
-        const ragUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/rag/chat-all`
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL && !process.env.NEXT_PUBLIC_APP_URL.includes('localhost')
+            ? process.env.NEXT_PUBLIC_APP_URL
+            : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://meetmatee.com')
+        const ragUrl = `${baseUrl}/api/rag/chat-all`
         console.log('[Slack Bot] Querying RAG API at:', ragUrl)
         const response = await fetch(ragUrl, {
             method: 'POST',

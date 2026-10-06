@@ -7,7 +7,8 @@ import { verifySlackSignature } from './utils/verifySlackSignature'
 
 const app = new App({
     signingSecret: process.env.SLACK_SIGNING_SECRET!,
-    authorize: authorizeSlack
+    authorize: authorizeSlack,
+    processBeforeResponse: true
 })
 
 app.event('app_mention', handleAppMention)
