@@ -110,8 +110,8 @@ export async function POST(request: NextRequest) {
 
             googleEventIds.add(event.id);
 
-            const meetingUrl = event.hangoutLink || event.conferenceData?.entryPoints?.[0]?.uri;
-            if (!meetingUrl || !event.start?.dateTime) continue;
+            const meetingUrl = event.hangoutLink || event.conferenceData?.entryPoints?.[0]?.uri || null;
+            if (!event.start?.dateTime) continue; // Only skip if there's no start time
 
             const eventData = {
                 userId: user.id,
