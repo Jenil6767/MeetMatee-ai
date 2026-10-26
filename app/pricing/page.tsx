@@ -7,13 +7,22 @@ import { motion } from 'framer-motion'
 import { Check, Loader2 } from 'lucide-react'
 import { useUsage } from '@/app/contexts/UsageContext'
 
+type BillingInterval = 'monthly' | 'yearly'
+
 const plans = [
   {
     id: 'starter',
     name: 'Starter',
-    price: 9,
-    priceId: process.env.NEXT_PUBLIC_STRIPE_STARTER_MONTHLY!,
     description: 'Perfect for people getting started',
+    popular: false,
+    monthly: {
+      price: 9,
+      priceId: process.env.NEXT_PUBLIC_STRIPE_STARTER_MONTHLY || '',
+    },
+    yearly: {
+      price: 99,
+      priceId: process.env.NEXT_PUBLIC_STRIPE_STARTER_YEARLY || process.env.NEXT_PUBLIC_STRIPE_STARTER_MONTHLY || '',
+    },
     features: [
       '10 meetings per month',
       '30 AI chat messages per day',
@@ -21,14 +30,20 @@ const plans = [
       'Action items extraction',
       'Email Notifications',
     ],
-    popular: false,
   },
   {
     id: 'pro',
     name: 'Pro',
-    price: 29,
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY!,
     description: 'Perfect for people growing who need more power',
+    popular: true,
+    monthly: {
+      price: 29,
+      priceId: process.env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY || '',
+    },
+    yearly: {
+      price: 319,
+      priceId: process.env.NEXT_PUBLIC_STRIPE_PRO_YEARLY || process.env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY || '',
+    },
     features: [
       '30 meetings per month',
       '100 AI chat messages per day',
@@ -37,14 +52,20 @@ const plans = [
       'Email Notifications',
       'Priority Support',
     ],
-    popular: true,
   },
   {
     id: 'premium',
     name: 'Premium',
-    price: 99,
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PREMIUM_MONTHLY!,
     description: 'Perfect for people who need unlimited limits',
+    popular: false,
+    monthly: {
+      price: 99,
+      priceId: process.env.NEXT_PUBLIC_STRIPE_PREMIUM_MONTHLY || '',
+    },
+    yearly: {
+      price: 1090,
+      priceId: process.env.NEXT_PUBLIC_STRIPE_PREMIUM_YEARLY || process.env.NEXT_PUBLIC_STRIPE_PREMIUM_MONTHLY || '',
+    },
     features: [
       'Unlimited meetings per month',
       'Unlimited AI chat messages per day',
@@ -53,7 +74,6 @@ const plans = [
       'Email Notifications',
       'Priority Support',
     ],
-    popular: false,
   },
 ]
 
@@ -61,6 +81,7 @@ export default function Pricing() {
   const { user } = useUser()
   const { usage } = useUsage()
   const router = useRouter()
+  const [billingInterval, setBillingInterval] = useState<BillingInterval>('monthly')
   const [loading, setLoading] = useState<string | null>(null)
 
   const handlePlanAction = async (priceId: string, planName: string) => {
@@ -118,10 +139,63 @@ export default function Pricing() {
         </p>
       </motion.div>
 
+      {/* Billing Switch */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
+        className="flex items-center justify-center gap-3 mb-10 select-none flex-wrap"
+      >
+        <button
+          type="button"
+          onClick={() => setBillingInterval('monthly')}
+          className={`text-[15px] font-semibold transition-colors cursor-pointer ${billingInterval === 'monthly' ? 'text-[#0D0D0D]' : 'text-[#888888] hover:text-[#0D0D0D]'
+            }`}
+        >
+          Monthly
+        </button>
+
+        <button
+          type="button"
+          role="switch"
+          aria-checked={billingInterval === 'yearly'}
+          onClick={() => setBillingInterval(billingInterval === 'monthly' ? 'yearly' : 'monthly')}
+          className="w-12 h-6 bg-[#0D0D0D] rounded-full p-0.5 cursor-pointer flex items-center transition-colors relative"
+          aria-label="Toggle billing interval"
+        >
+          <motion.div
+            layout
+            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+            className={`w-5 h-5 bg-white rounded-full shadow-sm ${billingInterval === 'yearly' ? 'ml-auto' : 'mr-auto'
+              }`}
+          />
+        </button>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setBillingInterval('yearly')}
+            className={`text-[15px] font-semibold transition-colors cursor-pointer ${billingInterval === 'yearly' ? 'text-[#0D0D0D]' : 'text-[#888888] hover:text-[#0D0D0D]'
+              }`}
+          >
+            Yearly
+          </button>
+
+          <span className="bg-[#FFE600] text-black text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs tracking-tight">
+            Save 20%
+          </span>
+          {/* <span className="bg-black/[0.06] text-[#444444] text-[11px] font-medium px-2 py-0.5 rounded-full hidden sm:inline-block">
+            2 months free
+          </span> */}
+        </div>
+      </motion.div>
+
       {/* Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch max-w-xl mx-auto lg:max-w-none">
         {plans.map((plan, index) => {
-          const isLoading = loading === plan.priceId
+          const currentPricing = plan[billingInterval]
+          const isLoading = loading === currentPricing.priceId
           const isCurrentPlan = Boolean(user && usage?.currentPlan === plan.id && usage?.subscriptionStatus === 'active')
 
           return (
@@ -131,11 +205,10 @@ export default function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
-              className={`relative bg-white rounded-[24px] p-7 lg:p-9 shadow-[0_12px_40px_rgba(0,0,0,0.06)] flex flex-col justify-between transition-all duration-300 hover:-translate-y-[8px] ${
-                plan.popular
+              className={`relative bg-white rounded-[24px] p-7 lg:p-9 shadow-[0_12px_40px_rgba(0,0,0,0.06)] flex flex-col justify-between transition-all duration-300 hover:-translate-y-[8px] ${plan.popular
                   ? 'border-2 border-[#FF5A0A] shadow-[0_16px_50px_rgba(255,90,10,0.12)]'
                   : 'border border-black/[0.08]'
-              }`}
+                }`}
             >
               {plan.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#FF5A0A] text-white text-[11px] font-semibold uppercase tracking-wider px-3.5 py-0.5 rounded-full shadow-sm">
@@ -149,9 +222,11 @@ export default function Pricing() {
                   <h3 className="text-[20px] md:text-[22px] font-semibold tracking-[-0.02em] text-[#0D0D0D] mb-1.5">{plan.name}</h3>
                   <div className="flex items-baseline justify-center gap-1 my-2.5">
                     <span className="text-[40px] md:text-[46px] font-bold text-[#0D0D0D] leading-none">
-                      ${plan.price}
+                      ${currentPricing.price}
                     </span>
-                    <span className="text-[14px] text-[#555555] font-medium">/month</span>
+                    <span className="text-[14px] text-[#555555] font-medium">
+                      {billingInterval === 'monthly' ? '/month' : '/year'}
+                    </span>
                   </div>
                   <p className="text-[13px] sm:text-[14px] text-[#555555] font-normal tracking-[-0.01em] min-h-[36px] leading-[1.6]">
                     {plan.description}
@@ -175,15 +250,14 @@ export default function Pricing() {
 
               {/* Action Button */}
               <button
-                onClick={() => handlePlanAction(plan.priceId, plan.id)}
+                onClick={() => handlePlanAction(currentPricing.priceId, plan.id)}
                 disabled={isLoading || isCurrentPlan}
-                className={`w-full h-[52px] rounded-[16px] font-semibold text-[16px] transition-all duration-300 flex items-center justify-center ${
-                  isCurrentPlan
+                className={`w-full h-[52px] rounded-[16px] font-semibold text-[16px] transition-all duration-300 flex items-center justify-center ${isCurrentPlan
                     ? 'bg-[#F4F4F4] text-[#A0A0A0] border border-black/[0.05] cursor-not-allowed'
                     : plan.popular
                       ? 'bg-[#0F0F10] hover:bg-black text-white shadow-sm hover:-translate-y-[2px] cursor-pointer'
                       : 'bg-white border border-black/[0.12] text-[#0D0D0D] hover:bg-[#fafafa] hover:-translate-y-[2px] cursor-pointer'
-                }`}
+                  }`}
               >
                 {isLoading ? (
                   <>

@@ -256,6 +256,9 @@ function getPlanFromSubscription(subscription: Stripe.Subscription) {
         [process.env.NEXT_PUBLIC_STRIPE_STARTER_MONTHLY!]: 'starter',
         [process.env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY!]: 'pro',
         [process.env.NEXT_PUBLIC_STRIPE_PREMIUM_MONTHLY!]: 'premium',
+        ...(process.env.NEXT_PUBLIC_STRIPE_STARTER_YEARLY ? { [process.env.NEXT_PUBLIC_STRIPE_STARTER_YEARLY]: 'starter' } : {}),
+        ...(process.env.NEXT_PUBLIC_STRIPE_PRO_YEARLY ? { [process.env.NEXT_PUBLIC_STRIPE_PRO_YEARLY]: 'pro' } : {}),
+        ...(process.env.NEXT_PUBLIC_STRIPE_PREMIUM_YEARLY ? { [process.env.NEXT_PUBLIC_STRIPE_PREMIUM_YEARLY]: 'premium' } : {}),
     }
 
     const resolved = (priceId && priceToPlan[priceId]) || 'free'
